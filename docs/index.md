@@ -35,8 +35,6 @@ Selene was inspired by [Selenide](https://selenide.org/) from Java world.
 
 Tests with Selene can be built either in a simple straightforward "selenide' style or with PageObjects composed from Widgets i.e. reusable element components.
 
-## Table of content
-
 * [Versions](#versions)
     * [Migration Guide](#migration-guide)
 * [Prerequisites](#prerequisites)

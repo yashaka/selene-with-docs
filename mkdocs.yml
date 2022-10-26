@@ -3,12 +3,12 @@ site_url: https://hotenov.github.io/selene-with-docs/
 
 nav:
 - Selene: "index.md"
-- "Guides":
-  - "Docs Setup": "guides/docs-setup.md"
 - Contributing: "CONTRIBUTING.md"
 - Release Process: "CONTRIBUTING/#release-process"
 - Changelog: "CHANGELOG.md"
 - License: "LICENSE.md"
+- "Guides":
+  - "Docs Setup": "guides/docs-setup.md"
 - About: "about.md"
 
 theme:
