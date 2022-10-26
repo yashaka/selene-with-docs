@@ -3,8 +3,8 @@
 [![tests](https://github.com/yashaka/selene/actions/workflows/tests.yml/badge.svg)](https://github.com/yashaka/selene/actions/workflows/tests.yml)
 [![codecov](https://codecov.io/gh/yashaka/selene/branch/master/graph/badge.svg)](https://codecov.io/gh/yashaka/selene)
 ![Free](https://img.shields.io/badge/free-open--source-green.svg)
-[![MIT License](http://img.shields.io/badge/license-MIT-green.svg)](https://github.com/yashaka/selene/blob/master/LICENSE)
-[![Project Template](http://img.shields.io/badge/project-template-9cf.svg)](https://github.com/yashaka/python-web-test)
+[![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/yashaka/selene/blob/master/LICENSE)
+[![Project Template](https://img.shields.io/badge/project-template-9cf.svg)](https://github.com/yashaka/python-web-test)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Downloads](https://pepy.tech/badge/selene)](https://pepy.tech/project/selene)
 
@@ -17,10 +17,10 @@
 [![Join telegram chat https://t.me/selene_py](https://img.shields.io/badge/chat-telegram-blue)](https://t.me/selene_py)
 [![Присоединяйся к чату https://t.me/selene_py_ru](https://img.shields.io/badge/%D1%87%D0%B0%D1%82-telegram-red)](https://t.me/selene_py_ru)
 
-[![Sign up for a course http://autotest.how/selene](https://img.shields.io/badge/course-sign_up-blue)](http://autotest.how/selene)
-[![Запишись на курс http://autotest.how/selene-ru](https://img.shields.io/badge/%D0%BD%D0%B0%D0%B1%D0%BE%D1%80-%D0%BD%D0%B0%20%D0%BA%D1%83%D1%80%D1%81-red)](http://autotest.how/selene-ru)
+[![Sign up for a course https://autotest.how/selene](https://img.shields.io/badge/course-sign_up-blue)](https://autotest.how/selene)
+[![Запишись на курс https://autotest.how/selene-ru](https://img.shields.io/badge/%D0%BD%D0%B0%D0%B1%D0%BE%D1%80-%D0%BD%D0%B0%20%D0%BA%D1%83%D1%80%D1%81-red)](https://autotest.how/selene-ru)
 [![Учи Selene https://leanpub.com/selene-automation-ru](https://img.shields.io/badge/%D0%BA%D0%BD%D0%B8%D0%B3%D0%B0-leanpub-red)](https://leanpub.com/selene-automation-ru)
-[![Реєструйся на курс http://autotest.how/selene-uk](https://img.shields.io/badge/%D0%BD%D0%B0%D0%B1%D1%96%D1%80-%D0%BD%D0%B0_%D0%BA%D1%83%D1%80%D1%81-yellow)](http://autotest.how/selene-uk)
+[![Реєструйся на курс https://autotest.how/selene-uk](https://img.shields.io/badge/%D0%BD%D0%B0%D0%B1%D1%96%D1%80-%D0%BD%D0%B0_%D0%BA%D1%83%D1%80%D1%81-yellow)](https://autotest.how/selene-uk)
 
 
 Main features:
@@ -31,7 +31,7 @@ Main features:
 - **Automatic driver management** (no need to install and setup driver for quick local execution)
 
 
-Selene was inspired by [Selenide](http://selenide.org/) from Java world.
+Selene was inspired by [Selenide](https://selenide.org/) from Java world.
 
 Tests with Selene can be built either in a simple straightforward "selenide' style or with PageObjects composed from Widgets i.e. reusable element components.
 
