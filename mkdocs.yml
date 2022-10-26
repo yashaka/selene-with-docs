@@ -2,10 +2,14 @@ site_name: Selene
 site_url: https://hotenov.github.io/selene-with-docs/
 
 nav:
-  - Home: index.md
-  - "Guides":
-    - "Docs Setup": "guides/docs-setup.md"
-  - About: about.md
+- Selene: "index.md"
+- "Guides":
+  - "Docs Setup": "guides/docs-setup.md"
+- Contributing: "CONTRIBUTING.md"
+- Release Process: "CONTRIBUTING/#release-process"
+- Changelog: "CHANGELOG.md"
+- License: "LICENSE.md"
+- About: "about.md"
 
 theme:
   name: material
@@ -36,3 +40,8 @@ plugins:
 - search
 - autorefs
 - mkdocstrings
+
+markdown_extensions:
+  - pymdownx.snippets:
+      # base_path: ["."]  # for root of repo
+      base_path: ["docs"]

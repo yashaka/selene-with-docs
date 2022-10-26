@@ -425,12 +425,12 @@ TBD
 
 ## Contributing
 
-[see CONTRIBUTING.md](https://github.com/yashaka/selene/blob/master/CONTRIBUTING.md)
+[see CONTRIBUTING.md](CONTRIBUTING.md)
 
 ## Release Process
 
-[see CONTRIBUTING.md#release-process](https://github.com/yashaka/selene/blob/master/CONTRIBUTING.md#release-process)
+[see CONTRIBUTING.md#release-process](CONTRIBUTING.md#release-process)
 
 ## Changelog
 
-[see CHANGELOG.md](https://github.com/yashaka/selene/blob/master/CHANGELOG.md)
+[see CHANGELOG.md](CHANGELOG.md)
