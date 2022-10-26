@@ -42,6 +42,8 @@ plugins:
 - mkdocstrings
 
 markdown_extensions:
+  - toc:
+      permalink: "#"
   - pymdownx.snippets:
       # base_path: ["."]  # for root of repo
       base_path: ["docs"]
