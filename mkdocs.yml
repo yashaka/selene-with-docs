@@ -1,4 +1,4 @@
-site_name: Selene. Fork (for docs experiments)
+site_name: Selene. Mock (for docs experiments)
 site_url: https://hotenov.github.io/selene-with-docs/
 
 nav:
@@ -13,8 +13,8 @@ nav:
 
 theme:
   name: material
-  favicon: img/favicon.ico
-  logo: img/apple-touch-icon.png
+  favicon: assets/images/favicon.png
+  logo: assets/images/apple-touch-icon.png
   custom_dir: docs/overrides
   palette:
   - media: '(prefers-color-scheme: light)'
