@@ -1,16 +1,27 @@
+# Project information
 site_name: Selene. Mock (for docs experiments)
 site_url: https://hotenov.github.io/selene-with-docs/
+site_author: Artem Hotenov
+site_description: >-
+  Mock (copy) of selene repository to conducts different
+  experiments with docs and other stuff
 
+# Repository
+repo_name: yashaka/selene
+repo_url: https://github.com/yashaka/selene
+
+# Page tree
 nav:
-- Selene: "index.md"
-- Contributing: "CONTRIBUTING.md"
-- Release Process: "CONTRIBUTING/#release-process"
-- Changelog: "CHANGELOG.md"
-- License: "LICENSE.md"
-- "Guides":
-  - "Docs Setup": "guides/docs-setup.md"
-- About: "about.md"
+  - Selene: index.md
+  - Contributing: CONTRIBUTING.md
+  - Release Process: CONTRIBUTING/#release-process
+  - Changelog: CHANGELOG.md
+  - License: LICENSE.md
+  - Guides:
+    - Docs Setup: guides/docs-setup.md
+  - About: about.md
 
+# Configuration
 theme:
   name: material
   favicon: assets/images/favicon.png
@@ -36,14 +47,19 @@ theme:
   - search.highlight
   - content.tabs.link
 
+# Plugins
 plugins:
-- search
-- autorefs
-- mkdocstrings
+  - search
+  - autorefs
+  - mkdocstrings
 
+# Extensions
 markdown_extensions:
   - toc:
       permalink: "#"
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
   - pymdownx.snippets:
-      # base_path: ["."]  # for root of repo
       base_path: ["docs"]
+  - pymdownx.superfences
