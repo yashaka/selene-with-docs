@@ -1,4 +1,4 @@
-name: Deploy Docs to Pages
+name: Deploy Preview Docs
 
 env:
   # Specify Python version to quick change in the future
