@@ -71,7 +71,7 @@ jobs:
     # Deploy to the github-pages environment
     environment:
       name: preview-docs
-      url: ${{ steps.deployment.outputs.page_url }}/preview/
+      url: ${{ steps.change-page-url.outputs.new_page_url }}
 
     # Specify runner + deployment step
     runs-on: ubuntu-latest
@@ -79,3 +79,6 @@ jobs:
       - name: Deploy docs to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1
+      - name: Override page_url
+        id: change-page-url
+        run: echo "new_page_url=${{ steps.deployment.outputs.page_url }}preview/" >> $GITHUB_OUTPUT
