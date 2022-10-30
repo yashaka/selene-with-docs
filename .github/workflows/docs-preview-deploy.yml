@@ -1,4 +1,4 @@
-name: Deploy Docs to Pages
+name: Deploy Preview Docs
 
 env:
   # Specify Python version to quick change in the future
@@ -11,7 +11,7 @@ on:
   # Triggers the workflow on push events but only for the "main" branch
   # and docs related files (paths)
   push:
-    branches: [ "doc-*" ]
+    branches: [ "docs-*" ]
     # paths:
     #   - ".github/workflows/deploy-mkdocs-poetry.ya?ml"
     #   - "mkdocs.ya?ml"
