@@ -50,7 +50,7 @@ jobs:
 
       # Build MkDocs static files (in 'site' folder)
       - name: Build docs
-        run: poetry run mkdocs build
+        run: poetry run mkdocs build -d site/preview
 
       # upload the static files as an artifact
       - name: Upload static artifact (.zip)
