@@ -24,8 +24,8 @@ nav:
 # Configuration
 theme:
   name: material
-  icon:
-    repo: fontawesome/brands/github-alt
+  # icon:
+  #   repo: fontawesome/brands/github-alt
   favicon: assets/images/favicon.png
   logo: assets/images/apple-touch-icon.png
   custom_dir: docs/overrides
