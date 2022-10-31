@@ -1,3 +1,4 @@
+--8<-- [start:githubSection]
 # Selene - User-oriented Web UI browser tests in Python (Selenide port)
 
 [![tests](https://github.com/yashaka/selene/actions/workflows/tests.yml/badge.svg)](https://github.com/yashaka/selene/actions/workflows/tests.yml)
@@ -425,12 +426,17 @@ TBD
 
 ## Contributing
 
-[see CONTRIBUTING.md](https://github.com/yashaka/selene/blob/master/CONTRIBUTING.md)
+[see CONTRIBUTING.md][contributing]
 
 ## Release Process
 
-[see CONTRIBUTING.md#release-process](https://github.com/yashaka/selene/blob/master/CONTRIBUTING.md#release-process)
+[see CONTRIBUTING.md#release-process][release-process]
 
 ## Changelog
 
-[see CHANGELOG.md](https://github.com/yashaka/selene/blob/master/CHANGELOG.md)
+[see CHANGELOG.md][changelog]
+--8<-- [end:githubSection]
+
+[contributing]: https://github.com/yashaka/selene/blob/master/CONTRIBUTING.md
+[release-process]: https://github.com/yashaka/selene/blob/master/CONTRIBUTING.md#release-process
+[changelog]: https://github.com/yashaka/selene/blob/master/CHANGELOG.md
