@@ -13,17 +13,26 @@ repo_url: https://github.com/yashaka/selene
 # Page tree
 nav:
   - Selene: index.md
-  - Contributing: CONTRIBUTING.md
-  - Release Process: CONTRIBUTING/#release-process
-  - Changelog: CHANGELOG.md
-  - License: LICENSE.md
-  - Guides:
-    - Docs Setup: guides/docs-setup.md
-  - About: about.md
+  - Contributing:
+    - Source code: 
+      - How to contribute: contrib/code/how-to-contribute.md
+      - Code conventions: contrib/code/code-conventions.md
+      - Release workflow: contrib/code/release-workflow.md
+    - Documentation:
+      - How to organize docs: contrib/docs/how-to-organize-docs.md
+      - How to write docs: contrib/docs/how-to-write-docs.md
+      - How to contribute: contrib/docs/how-to-contribute.md
+  - Changelog: changelog.md
+  - License: license.md
+  # - Guides:
+    # - Docs Setup: guides/docs-setup.md
+  # - About: about.md
 
 # Configuration
 theme:
   name: material
+  icon:
+    repo: fontawesome/brands/github
   favicon: assets/images/favicon.png
   logo: assets/images/apple-touch-icon.png
   custom_dir: docs/overrides
@@ -43,9 +52,30 @@ theme:
       icon: material/lightbulb-outline
       name: Switch to dark mode
   features:
-  - search.suggest
-  - search.highlight
-  - content.tabs.link
+    - search.suggest
+    - search.highlight
+
+extra:
+  social:
+    - icon: fontawesome/brands/telegram
+      link: https://t.me/selene_py_ru
+      name: Selene.py на русском
+    - icon: material/web
+      link: https://autotest.how/selene-ru
+      name: Набор на курс
+    - icon: simple/leanpub
+      link: https://t.me/selene_py_ru
+      name: Книга на Leanpub
+    - icon: material/web
+      link: https://autotest.how/selene
+      name: Sign up to Selene course
+    - icon: fontawesome/brands/telegram
+      link: https://t.me/selene_py
+      name: Selene.py (in English)
+    - icon: material/web
+      link: https://autotest.how/selene-uk
+      name: Набiр на курс
+
 
 # Plugins
 plugins:
@@ -57,9 +87,21 @@ plugins:
 markdown_extensions:
   - toc:
       permalink: "#"
+  - admonition
+  - pymdownx.details
   - pymdownx.highlight:
       anchor_linenums: true
   - pymdownx.inlinehilite
   - pymdownx.snippets:
       base_path: ["docs"]
   - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.striphtml:
+      strip_comments: true
+      strip_js_on_attributes: false
+  - pymdownx.critic
+  - pymdownx.caret
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.tilde

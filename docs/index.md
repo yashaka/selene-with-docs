@@ -5,7 +5,7 @@
 <!--References for web-->
 
 <!-- markdownlint-disable MD053 -->
-[contributing]: CONTRIBUTING.md
-[release-process]: CONTRIBUTING.md#release-process
-[changelog]: CHANGELOG.md
+[contributing]: contrib/code/how-to-contribute.md
+[release-workflow]: contrib/code/release-workflow.md
+[changelog]: changelog.md
 <!-- markdownlint-enable MD037 -->
