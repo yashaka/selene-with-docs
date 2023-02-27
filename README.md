@@ -1,27 +1,22 @@
 <!-- --8<-- [start:githubSection] -->
 # Selene - User-oriented Web UI browser tests in Python (Selenide port)
 
+![Pre-release Version](https://img.shields.io/github/v/release/yashaka/selene?label=latest)
 [![tests](https://github.com/yashaka/selene/actions/workflows/tests.yml/badge.svg)](https://github.com/yashaka/selene/actions/workflows/tests.yml)
 [![codecov](https://codecov.io/gh/yashaka/selene/branch/master/graph/badge.svg)](https://codecov.io/gh/yashaka/selene)
 ![Free](https://img.shields.io/badge/free-open--source-green.svg)
-[![MIT License](http://img.shields.io/badge/license-MIT-green.svg)](https://github.com/yashaka/selene/blob/master/LICENSE)
-[![Project Template](http://img.shields.io/badge/project-template-9cf.svg)](https://github.com/yashaka/python-web-test)
+[![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/yashaka/selene/blob/master/LICENSE)
+[![Project Template](https://img.shields.io/badge/project-template-9cf.svg)](https://github.com/yashaka/python-web-test)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Downloads](https://pepy.tech/badge/selene)](https://pepy.tech/project/selene)
-
-![GitHub stats in](https://raw.githubusercontent.com/yashaka/selene/traffic/traffic-selene/in_2021.svg)
-![GitHub views](https://raw.githubusercontent.com/yashaka/selene/traffic/traffic-selene/views.svg)
-![GitHub views per week](https://raw.githubusercontent.com/yashaka/selene/traffic/traffic-selene/views_per_week.svg)
-![GitHub clones](https://raw.githubusercontent.com/yashaka/selene/traffic/traffic-selene/clones.svg)
-![GitHub clones per week](https://raw.githubusercontent.com/yashaka/selene/traffic/traffic-selene/clones_per_week.svg)
 
 [![Join telegram chat https://t.me/selene_py](https://img.shields.io/badge/chat-telegram-blue)](https://t.me/selene_py)
 [![Присоединяйся к чату https://t.me/selene_py_ru](https://img.shields.io/badge/%D1%87%D0%B0%D1%82-telegram-red)](https://t.me/selene_py_ru)
 
-[![Sign up for a course http://autotest.how/selene](https://img.shields.io/badge/course-sign_up-blue)](http://autotest.how/selene)
-[![Запишись на курс http://autotest.how/selene-ru](https://img.shields.io/badge/%D0%BD%D0%B0%D0%B1%D0%BE%D1%80-%D0%BD%D0%B0%20%D0%BA%D1%83%D1%80%D1%81-red)](http://autotest.how/selene-ru)
+[![Sign up for a course https://autotest.how/selene](https://img.shields.io/badge/course-sign_up-blue)](https://autotest.how/selene)
+[![Запишись на курс https://autotest.how/selene-ru](https://img.shields.io/badge/%D0%BD%D0%B0%D0%B1%D0%BE%D1%80-%D0%BD%D0%B0%20%D0%BA%D1%83%D1%80%D1%81-red)](http://autotest.how/selene-ru)
 [![Учи Selene https://leanpub.com/selene-automation-ru](https://img.shields.io/badge/%D0%BA%D0%BD%D0%B8%D0%B3%D0%B0-leanpub-red)](https://leanpub.com/selene-automation-ru)
-[![Реєструйся на курс http://autotest.how/selene-uk](https://img.shields.io/badge/%D0%BD%D0%B0%D0%B1%D1%96%D1%80-%D0%BD%D0%B0_%D0%BA%D1%83%D1%80%D1%81-yellow)](http://autotest.how/selene-uk)
+[![Реєструйся на курс https://autotest.how/selene-uk](https://img.shields.io/badge/%D0%BD%D0%B0%D0%B1%D1%96%D1%80-%D0%BD%D0%B0_%D0%BA%D1%83%D1%80%D1%81-yellow)](https://autotest.how/selene-uk)
 
 Main features:
 
@@ -45,16 +40,16 @@ Tests with Selene can be built either in a simple straightforward "selenide' sty
     - [Advanced API](#advanced-api)
 - [Tutorials](#tutorials)
 - [Examples](#more-examples)
-- [Contributing](#contributing)
+- [Contribution](#contribution)
 - [Release Workflow](#release-workflow)
 - [Changelog](#changelog)
 
 ## Versions
 
-- Latest recommended version to use is >= [2.0.0b14][latest-recommended-version]
+- Latest recommended version to use is [2.0.0b14+][latest-recommended-version]
     - it's a completely new version of selene, with improved API and speed
-    - supports 3.7 <= python <= 3.10,
-    - bundled with Selenium >= 4.1
+    - supports Python `3.7+`
+    - bundled with Selenium `4.1+`
     - it's incompatible with [1.x][brunch-ver-1]
     - current master branch is pointed to 2.x
     - yet in alpha/beta stage, refining API, improving "migratability" and testing
@@ -64,16 +59,16 @@ Tests with Selene can be built either in a simple straightforward "selenide' sty
     - it was proven to be stable for production use
     - its sources and corresponding README version
     can be found at [1.x][brunch-ver-1] branch.
-    - supports python 2.7, 3.5, 3.6, 3.7
+    - supports python `2.7, 3.5, 3.6, 3.7`
 
 THIS README DESCRIBES THE USAGE OF THE PRE-RELEASE version of Selene. For older docs look at [1.x][brunch-ver-1] branch.
 
 ### Migration guide
 
-From 1.0.1 to 2.0.0aLATEST:
+From `1.0.2` to `2.0.0b<LATEST>`:
 
-- upgrade to python 3.7
-- update selene to 2.0.0aLATEST
+- upgrade to Python 3.7+
+- update selene to `2.0.0b<LATEST>`
     - find&replace the `collection.first()` method from `.first()` to `.first`
     - ensure all conditions like `text('foo')` are used via `be.*` or `have.*` syntax
         - example:
@@ -92,7 +87,7 @@ From 1.0.1 to 2.0.0aLATEST:
 
 ## Prerequisites
 
-[Python >= 3.7][python-37]
+[Python 3.7+][python-37]
 
 Given [pyenv][pyenv] installed, installing needed version of Python is pretty simple:
 
@@ -441,9 +436,9 @@ TBD
 
 TBD
 
-## Contributing
+## Contribution
 
-[see CONTRIBUTING.md][contributing]
+[see CONTRIBUTING.md][contribution]
 
 ## Release Workflow
 
@@ -465,6 +460,6 @@ TBD
 <!-- --8<-- [end:githubSection] -->
 
 <!-- GitHub only references -->
-[contributing]: https://hotenov.github.io/selene-with-docs/contrib/code/how-to-contribute/
-[release-workflow]: https://hotenov.github.io/selene-with-docs/contrib/code/release-workflow/
+[contribution]: https://hotenov.github.io/selene-with-docs/contribution/to-source-code.guide/
+[release-workflow]: https://hotenov.github.io/selene-with-docs/contribution/release-workflow.guide/
 [changelog]: https://hotenov.github.io/selene-with-docs/changelog/

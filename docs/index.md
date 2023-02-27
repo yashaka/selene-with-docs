@@ -1,11 +1,9 @@
-<!-- markdownlint-disable MD041 -->
 --8<-- "../README.md:githubSection"
-<!-- markdownlint-enable MD041 -->
 
 <!--References for web-->
 
 <!-- markdownlint-disable MD053 -->
-[contributing]: contrib/code/how-to-contribute.md
-[release-workflow]: contrib/code/release-workflow.md
+[contribution]: contribution/to-source-code.guide.md
+[release-workflow]: contribution/release-workflow.guide.md
 [changelog]: changelog.md
-<!-- markdownlint-enable MD037 -->
+<!-- markdownlint-enable MD053 -->

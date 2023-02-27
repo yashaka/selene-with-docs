@@ -1,4 +1,4 @@
-# Code Conventions
+# Code conventions
 
 We follow the principles of consistency and readability.
 Code-style is controlled by few linter jobs in GitHub Actions.

@@ -12,21 +12,24 @@ repo_url: https://github.com/yashaka/selene
 
 # Page tree
 nav:
-  - Selene: index.md
-  - Contributing:
-    - Source code: 
-      - How to contribute: contrib/code/how-to-contribute.md
-      - Code conventions: contrib/code/code-conventions.md
-      - Release workflow: contrib/code/release-workflow.md
-    - Documentation:
-      - How to organize docs: contrib/docs/how-to-organize-docs.md
-      - How to write docs: contrib/docs/how-to-write-docs.md
-      - How to contribute: contrib/docs/how-to-contribute.md
+  - Overview: index.md
+  # - Learn Basics:
+  #   - Stub Title 1: learn-basics/automate-testing.guide.md
+  # - Learn Advanced:
+  #   - Stub Title 1: learn-advanced/automate-testing.guide.md
+  # - FAQ:
+  #   - Stub Title 1: faq/custom-chrome-profile.howto.md
+  # - Use Cases:
+  #   - Stub Title 1: use-cases/path-to-some.example.md
+  - Contribution:
+    - How to contribute: contribution/to-source-code.guide.md
+    - Code conventions: contribution/code-conventions.guide.md
+    - Release workflow: contribution/release-workflow.guide.md
+    - How to contribute to docs: contribution/to-documentation.guide.md
+    - How to organize docs: contribution/how-to-organize-docs.guide.md
+    - How to write docs: contribution/how-to-write-docs.guide.md
   - Changelog: changelog.md
   - License: license.md
-  # - Guides:
-    # - Docs Setup: guides/docs-setup.md
-  # - About: about.md
 
 # Configuration
 theme:
@@ -34,8 +37,8 @@ theme:
   icon:
     repo: fontawesome/brands/github
   favicon: assets/images/favicon.png
-  logo: assets/images/apple-touch-icon.png
-  custom_dir: docs/overrides
+  logo: assets/images/logo-icon.png
+  # custom_dir: docs/overrides
   palette:
   - media: '(prefers-color-scheme: light)'
     scheme: default
@@ -82,6 +85,9 @@ plugins:
   - search
   - autorefs
   - mkdocstrings
+  - redirects:
+        redirect_maps:
+            CONTRIBUTING.md: contribution/to-source-code.guide.md
 
 # Extensions
 markdown_extensions:

@@ -88,5 +88,5 @@ pages.
 <!-- --8<-- [end:githubSection] -->
 
 <!-- GitHub only references -->
-[code-conventions]: https://hotenov.github.io/selene-with-docs/contrib/code/code-conventions/
-[release-workflow]: https://hotenov.github.io/selene-with-docs/contrib/code/release-workflow/
+[code-conventions]: https://hotenov.github.io/selene-with-docs/contribution/code-conventions.guide/
+[release-workflow]: https://hotenov.github.io/selene-with-docs/contribution/release-workflow.guide/

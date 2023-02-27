@@ -1,4 +1,8 @@
-# Docs setup guide
+# How to add documentation to your project
+
+This short tutorial describes how to add documentation
+to your Python project on GitHub,
+using MkDocs, poetry and GitHub actions and GitHub pages.
 
 ## Add docs dependencies to your project with poetry
 
@@ -8,7 +12,7 @@ Add McDocs
 poetry add mkdocs@latest --group docs
 ```
 
-Add material theme package
+Add Material theme for MkDocs package
 
 ```plain
 poetry add mkdocs-material@latest --group docs
@@ -61,7 +65,7 @@ Repository settings button
 
 4. Under "Build and deployment", under "Source", select GitHub Actions.
 
-![steps in the picture](screenshots/github-pages-via-actions.png)
+![steps in the picture](assets/github-pages-via-actions.png)
 
 ## Create your GitHub actions workflow
 
@@ -156,8 +160,8 @@ jobs:
         uses: actions/deploy-pages@v1
 ```
 
-Push it into 'main' (and other changes above) and Bob's your uncle!
+Push it into `main` branch (and other changes above) and Bob's your uncle!
 
 After action will be completed check your GitHub URL to see result.
 
-![docs URL in job](screenshots/github-actions-url-to-docs.png)
+![docs URL in job](assets/github-actions-url-to-docs.png)

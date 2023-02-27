@@ -7,12 +7,6 @@ If you are not familiar with the Markdown syntax, check out Adam Pritchard's [Ma
 For consistency reason, we recommend you to use syntax given in this guide
 (*not using available alternatives*)
 
-!!! info
-
-    Such blocks as: **Footnotes**, **Tables**, **Blockquotes**, **Inline HTML**
-    are the same as described in cheat sheet, mentioned above.
-    Please refer to it.
-
 ## Preferred Markdown syntax
 
 ### Headers
@@ -25,16 +19,6 @@ For consistency reason, we recommend you to use syntax given in this guide
 `#### H4`  
 `##### H5`  
 `###### H6`  
-
-??? tip "How to suppress linter's warnings MD046"
-
-    In most cases H1 will be the first line of the page.  
-    If you use something specific lines at the beginning (meta-data, include, etc)
-    and you need suppress (ignore) linter's warning,
-    you can add special comment lines:  
-    `<!-- markdownlint-disable MD046 -->`  
-    `... ignored markdown block ...`  
-    `<!-- markdownlint-enable MD041 -->`  
 
 ### Emphasis
 
@@ -63,7 +47,7 @@ For consistency reason, we recommend you to use syntax given in this guide
 
 ### Lists
 
-- Use minus (-) followed by space for unordered list.
+- Use hyphen `-` followed by space for unordered list.
 - Use **four** spaces indentation for unordered lists.  
 (in standard syntax it is two spaces,
 and `markdownlint` will show warning MD007,
@@ -109,6 +93,8 @@ don't forget extension `.md`
 - In rare and reasonable cases, you can use an inline-style link.
 - Add HTML comment before reference list,
 to distinct list from the rest of content.
+- Place list of reference at the end of document.
+Preferably, in order of their appearance in text.
 
 <!-- markdownlint-disable MD046 -->
 === "Markdown"
@@ -120,7 +106,7 @@ to distinct list from the rest of content.
 
     <!-- References -->
     [selene-github]: https://github.com/yashaka/selene/
-    [home-docs]: ../../index.md
+    [home-docs]: ../index.md
     ```
 
 === "Result"
@@ -130,13 +116,26 @@ to distinct list from the rest of content.
     [I'm an inline-style link](https://t.me/selene_py_ru)
 
     [selene-github]: https://github.com/yashaka/selene/
-    [home-docs]: ../../index.md
+    [home-docs]: ../index.md
 <!-- markdownlint-enable MD046 -->
 
 ### Images
 
 - For better accessibility, we encourage you
 to specify alt text and title for images.
+- If you need to make new picture(s) for page,
+please use external optimization tools
+(for example,
+[Squoosh][squoosh-app],
+[TinyPNG][tiny-png-app] and
+[SVGOMG][svgomg-app])
+to shrink your images,
+before you commit them to git repository.
+- Put your new images in `assets` subfolder for each section
+(/learn-basics/, /faq/, /use-cases/, etc.).
+For example `./docs/faq/assets/chrome-driver-window.png`
+and use relative URL to it (see example below).
+- Use popular formats for your images, like JPEG, PNG, WebP and SVG.
 
 <!-- markdownlint-disable MD046 -->
 === "Markdown"
@@ -145,12 +144,13 @@ to specify alt text and title for images.
     Here's our logo (hover to see the title text):
 
     Inline-style: 
-    ![selene logo](https://yashaka.github.io/selene/assets/images/apple-touch-icon.png "Selene logo")
+    ![Relative to outside path](../assets/images/logo-icon.png "Selene logo")
 
     Reference-style: 
     ![alt text][logo]
+    ![Relative path for current document][assets/my-pic.png]
 
-    [logo]: https://yashaka.github.io/selene/assets/images/apple-touch-icon.png "Logo Title Text 2"
+    [logo]: ../assets/images/logo-icon.png "Logo Title Text 2"
     ```
 
 === "Result"
@@ -166,21 +166,18 @@ to specify alt text and title for images.
     [logo]: https://yashaka.github.io/selene/assets/images/apple-touch-icon.png "Logo Title Text 2"
 <!-- markdownlint-enable MD046 -->
 
-!!! question "Where to store images for individual page?"
-
-    TO DO: After answer update example above and add statment about storing images
-
 ### Code and Syntax Highlighting
 
 - Use only fenced code blocks (fenced by lines with three back-ticks ```).
-- Write language identificator right after back-ticks (**without space**).
-- For plain text (console output) use `plain` language identificator.
+- Write language identifier right after back-ticks (**without space**).
+- For plain text (console output) use `plain` language identifier.
 
 <!-- markdownlint-disable MD046 -->
 === "Markdown"
 
-    ```plain
-    from selene.support.shared import browser
+    ````plain
+    ```python
+    from selene import browser
     from selene import by, be, have
 
     browser.open('https://google.com/ncr')
@@ -188,12 +185,13 @@ to specify alt text and title for images.
     .type('selenium').press_enter()
     browser.all('.srg .g').should(have.size(10))\
     .first.should(have.text('Selenium automates browsers'))
-    ```
+    ``` 
+    ````
 
 === "Result"
 
     ```python
-    from selene.support.shared import browser
+    from selene import browser
     from selene import by, be, have
 
     browser.open('https://google.com/ncr')
@@ -237,8 +235,8 @@ when you want to insert new line in the same paragraph
 on rendered page too (analog `<br>` in HTML).
 - Use [semantic linefeeds][semantic-linefeeds],
 wrapping lines by 72-80 characters
-except for links and images and .md files in project root
-(because GitHub renders each newline character).
+==except== for links and images and .md files in project root
+(unfortunately, GitHub renders each newline character).
 - Paragraphs are separated by a blank line.
 
 <!-- markdownlint-disable MD046 -->
@@ -265,6 +263,31 @@ except for links and images and .md files in project root
     reusable element components.
 <!-- markdownlint-enable MD046 -->
 
+### Footnotes, Tables, Blockquotes
+
+<!-- markdownlint-disable MD046 -->
+!!! info
+
+    Such blocks as: **Footnotes**, **Tables**, **Blockquotes**, **Inline HTML**
+    are the same as described in the [cheat sheet][markdown-cheatsheet], mentioned at the beginning of this page.
+    Please, refer to it.
+<!-- markdownlint-enable MD046 -->
+
+### Other
+
+There are many other special formatting blocks,
+supported by Material theme for MkDocs.
+You can see all of them on [Reference page][material-reference-page].
+Before using available (free) blocks,
+check that they are enabled (configured) in `mkdocs.yml` configuration file
+(`markdown_extensions:` setting for most of them)
+and discuss with project owner or other contributors
+should you insert (use) them or not.
+
 <!-- References -->
 [markdown-cheatsheet]: https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
+[squoosh-app]: https://squoosh.app/
+[tiny-png-app]: https://tinypng.com/
+[svgomg-app]: https://jakearchibald.github.io/svgomg/
 [semantic-linefeeds]: https://rhodesmill.org/brandon/2012/one-sentence-per-line/
+[material-reference-page]: https://squidfunk.github.io/mkdocs-material/reference/
