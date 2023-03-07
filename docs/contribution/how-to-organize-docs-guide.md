@@ -104,7 +104,7 @@ Selene has following file layout:
 
     - Can be out-dated here, please look into `docs` folder
     or ask project owner where to put new document.
-    - Some filenames are not real, for demonstration purpose only).
+    - Some filenames are not real (for demonstration purpose only).
 <!-- markdownlint-enable MD046 -->
 
 ```plain
