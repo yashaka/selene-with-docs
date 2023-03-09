@@ -1,35 +1,57 @@
 # How to use custom profile
 
-This document describes how to run Selene tests
-with custom profile (also called "user data directory"),
-pitfalls and tips. It also includes a section on troubleshooting
-to help you with some common problems you might have with profiles.
+Browsers (Chrome and Firefox) save your personal information such as bookmarks,
+passwords and user preferences in a set of files called "custom profile",
+which is stored in a separate location from the browser program files.
+You can have multiple browser profiles, each containing
+a separate set of user information.
 
-We will provide examples for [Chrome](#profile-in-chrome)
-and [Firefox](#profile-in-firefox) browsers.
-Safari browser doesn't appear to support multiple profiles.
+You can use command-line switch *(argument, option)* to tell browser
+which profile to use.
 
-<!-- markdownlint-disable MD046 -->
-??? abstract "Environment and package versions used for writing examples"
+## Recipe for Chrome
 
-    ```plain
-    python = "^3.10"
-    selene = "2.0.0b17"
-    pytest = "^7.2.1"
-    selenium = "4.8.2"
+```python
+def test_chrome_fresh_profile_simple():
+    from selene import browser
+    from selenium.webdriver import Chrome, ChromeOptions
 
-    chromedriver = "110.0.5481"
-    geckodriver = "0.32.2"
+    browser_options = ChromeOptions()
+    browser_options.add_argument("user-data-dir=D:\_cache\Chrome\Fresh User Data")
+    browser_options.add_argument("profile-directory=Default")
 
-    Windows 10 x64 Version 22H2
-    Ubuntu 22.04 (with snap-packaged Firefox)
-        but the examples do not provide the way
-        to run Firefox snap version correctly
-    ```
+    browser.config.driver = Chrome(options=browser_options)
 
-<!-- markdownlint-enable MD046 -->
+    browser.open("chrome://version/")
+    browser.quit()
+```
+
+## Recipe for Firefox
+
+```python
+def test_firefox_existing_profile():
+    from selene import browser
+    from selenium.webdriver import Firefox, FirefoxOptions
+
+    browser_options = FirefoxOptions()
+    browser_options.add_argument("-profile")
+    browser_options.add_argument("/home/user/snap/firefox/common/.mozilla/firefox/t2y46pn0.default")
+
+    browser.config.driver = Firefox(options=browser_options)
+
+    browser.open("about:profiles")
+    browser.quit()
+```
+
+To learn more about custom profiles and see advanced examples,
+follow this document.
 
 ## Profile in Chrome
+
+Also called *"user data directory"*. Profiles are ideal when you want to:
+
+- Share a computer with multiple people.
+- Keep your different accounts, like work and personal, separate.
 
 ### Change User Data location
 
@@ -58,12 +80,18 @@ Thus, to run webdriver with a brand new profile
 you should specify another User Data directory on your computer:
 
 ```python
-def test_chrome_fresh_profile_simple():
+def test_chrome_fresh_profile_with_path():
+    from pathlib import Path
     from selene import browser
     from selenium.webdriver import Chrome, ChromeOptions
 
+    user_data = Path().home() / "my home profile"
+    profile_dir = "Default"
+
     browser_options = ChromeOptions()
-    browser_options.add_argument("user-data-dir=D:\_cache\Chrome\Fresh User Data")
+    browser_options.add_argument(f"user-data-dir={user_data}")
+    browser_options.add_argument(f"profile-directory={profile_dir}")
+
     browser.config.driver = Chrome(options=browser_options)
 
     browser.open("chrome://version/")
@@ -74,10 +102,28 @@ This repeats default behavior for new ChromeDriver session,
 but here we know exactly where the User Data directory will be created.
 It might be useful in rare cases.
 
-### Use existing profile
+We recommend you to use
+[Path][pathlib-path] class of [pathlib][python-pathlib] module
+*(especially in Python 3.6+)* for work with local paths.
+It lets you forget about slashes on different platforms,
+write more concise code, and do basic filesystem operations
+(writing / reading files, creating folders,
+resolve symlinks, work with relative paths, glob files and folders, etc.).
 
-The power of browser's profile is keeping all your Chrome info separate,
-like bookmarks, history, passwords, and other settings.
+<!-- markdownlint-disable MD046 -->
+??? note "Path class drawbacks"
+
+    While the **Path** is a great choice for local files and modern Python.
+    It has some disadvantages:
+
+    - does not support cloud storage paths (such as `gc://` or `s3://`)
+    
+    - has no equivalents for `shutil` functions, `os.chdir`, `os.walk` and
+    `relpath` from os.path
+    - performance issues (when you operate with thousands of Path objects)
+<!-- markdownlint-enable MD046 -->
+
+### Use existing profile
 
 You can copy your existing User Data directory *(with all profiles in it)*,
 and use them on another computer, with another browser version,
@@ -111,17 +157,38 @@ is created in User Data directory.
 Where N is consecutive number, i.e. 2, 3, 4, and so on.
 When folder is created you cannot change its name via Chrome GUI.
 
-So, when you have several profiles you ==have to== specify
-which profile to use for webdriver session:
+**Important:** when you have several profiles you ==have to== specify
+which profile to use for webdriver session.
+
+Let's assume you have pre-configured profiles,
+which placed on relative path to your test file,
+something like this:
+
+```plain
+📁 tests/
+├── 📁 test-data
+    └── 📁 profiles
+        ├── 📁 Default
+        └── 📁 Profile 2
+└── 📁 some-feature
+    └── 📄 web_ui_tests.py
+```
+
+Then, you can easily move your tests with configured profiles and run them anywhere.
 
 ```python
+# in 'web_ui_tests.py' file
 def test_chrome_second_profile():
+    from pathlib import Path
     from selene import browser
     from selenium.webdriver import Chrome, ChromeOptions
 
+    user_data = Path(__file__).parent.parent / "test-data" / "profiles"
+    profile_dir = "Profile 2"
+
     browser_options = ChromeOptions()
-    browser_options.add_argument("user-data-dir=D:\_cache\Chrome\Fresh User Data")
-    browser_options.add_argument("profile-directory=Profile 2")
+    browser_options.add_argument(f"user-data-dir={user_data}")
+    browser_options.add_argument(f"profile-directory={profile_dir}")
 
     browser.config.driver = Chrome(options=browser_options)
 
@@ -139,6 +206,10 @@ def test_chrome_second_profile():
     3. Look for the **Profile Path** field.
     This gives the path to the profile directory.
 <!-- markdownlint-enable MD046 -->
+
+**Security Note:** Share test profiles carefully, someone can get access
+to your sensitive information. Don't forget to delete profile folder manually,
+after you remove that profile in Chrome's profile manager.
 
 ### Arguments syntax
 
@@ -160,7 +231,7 @@ Here are some tips for using arguments in tests:
 
 - Slash `/` and backslash `\` in paths are interchangeable on Windows hosts.
     Forward slashes `/` are also valid on Windows
-    *(at least with modern version of Selenium and Windows 10, 11)*
+    *(at least with modern version of Python and Windows 10, 11)*
 
     These three method calls are valid and equivalent on Windows:
 
@@ -170,11 +241,6 @@ Here are some tips for using arguments in tests:
 
     DO NOT USE backslash `\` on Linux hosts,
     because it's valid character for filepath there.
-
-    We recommend you to use
-    [Path][pathlib-path] class of [pathlib][python-pathlib] module
-    *(added in Python 3.4)* for work with local paths.
-    In particularly, method resolve() when you need to get absolute path.
 
 - Do NOT quote white spaces
 
@@ -231,16 +297,21 @@ This gives the path to the profile directory.
 Command-line argument `-profile "profile_path"` is intended for start Firefox
 with the profile with the given path.
 Let's look how to use this switch in test,
-assuming that we have copied path to existing default profile on Ubuntu OS:
+assuming that we know the path to existing default profile on Ubuntu OS
+and run our test in terminal via pytest runner
+*(not from VS Code or PyCharm)*:
 
 ```python
 def test_firefox_existing_profile():
+    from pathlib import Path
     from selene import browser
     from selenium.webdriver import Firefox, FirefoxOptions
 
+    profile_dir = Path().home() / "snap/firefox/common/.mozilla/firefox/t2y46pn0.default"
+
     browser_options = FirefoxOptions()
     browser_options.add_argument("-profile")
-    browser_options.add_argument("/home/user/snap/firefox/common/.mozilla/firefox/t2y46pn0.default")
+    browser_options.add_argument(f"{profile_dir}")
 
     browser.config.driver = Firefox(options=browser_options)
 
@@ -260,6 +331,48 @@ and imported respective classes: **Firefox** and **FirefoxOptions**.
 <!-- markdownlint-enable MD046 -->
 
 <!-- markdownlint-disable MD046 -->
+??? tip "Run snap-based Firefox from VS Code and PyCharm"
+
+    Firefox installed via snap on Ubuntu 22.04 fails to start,
+    when you try to run a Selenium test from another snap app
+    (such as VS Code or PyCharm).
+
+    One way to workaround this problem is specifying exact path
+    to `firefox` and `geckodriver` executable files:
+
+    ```python
+    def test_snap_firefox_existing_profile_on_ubuntu():
+        from pathlib import Path
+        from selene import browser
+        from selenium.webdriver import Firefox, FirefoxOptions
+        from selenium.webdriver.firefox.service import Service
+
+        install_dir = Path("/snap/firefox/current/usr/lib/firefox")
+        driver_loc = install_dir / "geckodriver"
+        binary_loc = install_dir / "firefox"
+
+        profile_dir = Path().home() / "snap/firefox/common/.mozilla/firefox/t2y46pn0.default"
+
+        browser_options = FirefoxOptions()
+        browser_options.add_argument("-profile")
+        browser_options.add_argument(f"{profile_dir}")
+
+        fire_service = Service(driver_loc)
+        browser_options.binary_location = f"{binary_loc}"
+        browser.config.driver = Firefox(
+            service=fire_service,
+            options=browser_options,
+        )
+
+        browser.open("about:profiles")
+        browser.quit()
+    ```
+
+    This is "Path version" of the solution from this
+    [comment][snap-firefox-comment].
+<!-- markdownlint-enable MD046 -->
+
+<!-- markdownlint-disable MD046 -->
 ??? warning "Argument -P "profile_name" does not work with webdriver"
 
     Unfortunately, you can use this argument only in terminal modifying your profile
@@ -273,19 +386,26 @@ you can specify empty folder that has write permissions.
 This folder must be created **before** you run the test. For example, this might be:
 
 ```python
-browser_options.add_argument("/home/user/_myCache/Firefox/Ubuntu Profile 2")
+new_dir = Path().home() / "Desktop/New Dir"
+new_dir.mkdir(parents=True, exist_ok=True)
+browser_options.add_argument(f"{new_dir}")
 ```
 
 As mentioned above, this profile won't be listed with other existing profiles,
 but you can open Firefox with it and modify the profile settings from terminal
 specifying the same command-line switches (arguments).
 
+## What is about Safari browser?
+
+Safari browser doesn't appear to support multiple profiles.
+
 ## Troubleshooting
 
 In this section we'll list most common exceptions (errors)
 that you might have, running Selenium tests with browser profiles,
-possible causes of errors and how to fix them.  
-&nbsp;
+possible causes of errors and how to fix them.
+
+### DevToolsActivePort file doesn't exist
 
 {==
 
@@ -300,8 +420,9 @@ then you have specified the `--profile-directory` that does not exist.
 *Check profile directory name and argument syntax.*  
 If a browser starts and closes with this exception,
 then the same profile is opened in another window.
-*Close all windows that use this profile and try again.*  
-&nbsp;
+*Close all windows that use this profile and try again.*
+
+### Could not remove old devtools port file
 
 {==
 
@@ -315,8 +436,9 @@ is still attached to a running Chrome or Chromium process.
 Unnecessary quoting of white spaces in user data directory path
 (invalid path in general). *Check syntax in arguments*.  
 The same profile is opened in another window.
-*Close all windows that use this profile and try again.*  
-&nbsp;
+*Close all windows that use this profile and try again.*
+
+### Cannot create default profile directory
 
 {==
 
@@ -327,8 +449,9 @@ Message: unknown error: cannot create default profile directory
 
 Chrome can't create folder (no write permissions).
 *Specify the user data directory in a less restrictive location or
-grant permissions for `chromedriver` executable and `google-chrome` itself*.  
-&nbsp;
+grant permissions for `chromedriver` executable and `google-chrome` itself*.
+
+### Unable to discover open pages
 
 {==
 
@@ -340,8 +463,9 @@ Message: unknown error: unable to discover open pages
 Usually, the window for choosing profile is displayed
 (when multiple profiles exist).
 *Don't forget to specify `profile-directory` in that case
-(especially for Default profile folder)*  
-&nbsp;
+(especially for Default profile folder)*
+
+### Unable to write Firefox profile
 
 {==
 
@@ -357,6 +481,24 @@ Specify the profile directory in a less restrictive location or
 grant permissions for `geckodriver` executable and `firefox` itself*.  
 &nbsp;
 
+<!-- markdownlint-disable MD046 -->
+??? abstract "Environment and package versions used for writing examples"
+
+    ```plain
+    python = "3.10"
+    selene = "2.0.0b17"
+    pytest = "7.2.1"
+    selenium = "4.8.2"
+
+    chromedriver = "110.0.5481"
+    geckodriver = "0.32.2"
+
+    Windows 10 x64 Version 22H2
+    Ubuntu 22.04.2 LTS (with snap-packaged Firefox)
+    VS Code 1.76
+    ```
+<!-- markdownlint-enable MD046 -->
+
 <!-- References -->
 [doc-chromedriver-capabilities]: https://chromedriver.chromium.org/capabilities
 [profiles-chrome-support]: https://support.google.com/chrome/answer/2364824?hl
@@ -364,3 +506,4 @@ grant permissions for `geckodriver` executable and `firefox` itself*.
 [pathlib-path]: https://docs.python.org/3/library/pathlib.html#pathlib.Path
 [python-pathlib]: https://docs.python.org/3/library/pathlib.html
 [firefox-profile-manager]: https://support.mozilla.org/en-US/kb/profile-manager-create-remove-switch-firefox-profiles
+[snap-firefox-comment]: https://github.com/SeleniumHQ/selenium/issues/11414#issuecomment-136673035
