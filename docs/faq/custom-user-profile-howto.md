@@ -3,7 +3,7 @@
 Browsers (Chrome and Firefox) save your personal information such as bookmarks,
 passwords and user preferences in a set of files called "custom profile",
 which is stored in a separate location from the browser program files.
-You can have multiple browser profiles, each containing
+You can have multiple custom profiles, each containing
 a separate set of user information.
 
 You can use command-line switch *(argument, option)* to tell browser
@@ -43,15 +43,17 @@ def test_firefox_existing_profile():
     browser.quit()
 ```
 
-To learn more about custom profiles and see advanced examples,
-follow this document.
+## What's about Safari?
 
-## Profile in Chrome
+Safari browser doesn't appear to support multiple profiles.
 
-Also called *"user data directory"*. Profiles are ideal when you want to:
+## Details on Chrome
 
-- Share a computer with multiple people.
-- Keep your different accounts, like work and personal, separate.
+The custom profile in Chrome is also called *"user data directory"*.
+Profiles are ideal when you want to:
+
+- Share browser settings with multiple people (team members).
+- Keep your different test accounts separate.
 
 ### Change User Data location
 
@@ -155,10 +157,11 @@ browser_options.add_argument("profile-directory=Default")
 When you create a new profile the subfolder "Profile N"
 is created in User Data directory.
 Where N is consecutive number, i.e. 2, 3, 4, and so on.
-When folder is created you cannot change its name via Chrome GUI.
+When folder has been created you cannot change its name via Chrome GUI.
 
-**Important:** when you have several profiles you ==have to== specify
-which profile to use for webdriver session.
+**Important:** When you have multiple profiles you ==have to== specify
+which profile to use for webdriver session
+via the `user-data-dir` switch.
 
 Let's assume you have pre-configured profiles,
 which placed on relative path to your test file,
@@ -174,7 +177,7 @@ something like this:
     └── 📄 web_ui_tests.py
 ```
 
-Then, you can easily move your tests with configured profiles and run them anywhere.
+Then, you can easily move your `tests` folder and run tests anywhere.
 
 ```python
 # in 'web_ui_tests.py' file
@@ -277,7 +280,7 @@ Here are some tips for using arguments in tests:
         ```
     <!-- markdownlint-enable MD046 -->
 
-## Profile in Firefox
+## Details on Firefox
 
 Managing profiles in Firefox is more tricky than in Chrome.
 Read more about that on ["Profile Manager"][firefox-profile-manager] page.
@@ -370,6 +373,9 @@ and imported respective classes: **Firefox** and **FirefoxOptions**.
 
     This is "Path version" of the solution from this
     [comment][snap-firefox-comment].
+    This workaround has a strange side effect: coping profile and cache data
+    into `~/.mozilla/firefox/` and `~/.cache/mozilla/firefox` directories.
+    In any cae, it's better than a failure during browser start.
 <!-- markdownlint-enable MD046 -->
 
 <!-- markdownlint-disable MD046 -->
@@ -394,10 +400,6 @@ browser_options.add_argument(f"{new_dir}")
 As mentioned above, this profile won't be listed with other existing profiles,
 but you can open Firefox with it and modify the profile settings from terminal
 specifying the same command-line switches (arguments).
-
-## What is about Safari browser?
-
-Safari browser doesn't appear to support multiple profiles.
 
 ## Troubleshooting
 
@@ -506,4 +508,6 @@ grant permissions for `geckodriver` executable and `firefox` itself*.
 [pathlib-path]: https://docs.python.org/3/library/pathlib.html#pathlib.Path
 [python-pathlib]: https://docs.python.org/3/library/pathlib.html
 [firefox-profile-manager]: https://support.mozilla.org/en-US/kb/profile-manager-create-remove-switch-firefox-profiles
+<!-- markdownlint-disable MD053 -->
 [snap-firefox-comment]: https://github.com/SeleniumHQ/selenium/issues/11414#issuecomment-136673035
+<!-- markdownlint-enable MD053 -->
