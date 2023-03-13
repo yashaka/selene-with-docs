@@ -9,6 +9,7 @@ site_description: >-
 # Repository
 repo_name: yashaka/selene
 repo_url: https://github.com/yashaka/selene
+edit_uri: edit/master/docs/
 
 # Page tree
 nav:
@@ -33,9 +34,12 @@ nav:
 
 # Configuration
 theme:
+  language: en
   name: material
   icon:
     repo: fontawesome/brands/github
+    edit: material/file-document-edit
+    view: material/file-eye
   favicon: assets/images/favicon.png
   logo: assets/images/logo-icon.png
   # custom_dir: docs/overrides
@@ -58,6 +62,8 @@ theme:
     - search.suggest
     - search.highlight
     - content.code.copy
+    - content.action.edit
+    - content.action.view
 
 extra:
   social:
@@ -83,6 +89,10 @@ plugins:
   - search
   - autorefs
   - mkdocstrings
+  - git-revision-date-localized:
+      enable_creation_date: true
+      type: timeago
+      fallback_to_build_date: true
   - redirects:
       redirect_maps:
         CONTRIBUTING.md: contribution/to-source-code-guide.md
