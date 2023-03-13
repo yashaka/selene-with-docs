@@ -285,7 +285,7 @@ Here are some tips for using arguments in tests:
         .add_argument('profile-directory=Default')
         ```
 
-    !!! failure 'BAD'
+    !!! failure "BAD"
 
         ```python
         .add_argument('user-data-dir=D:\_cache\Chrome\Fresh User Data\Default')
