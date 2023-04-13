@@ -23,6 +23,8 @@ nav:
     - How to use custom profile: faq/custom-user-profile-howto.md
   # - Use Cases:
   #   - Stub Title 1: use-cases/path-to-some-example.md
+  - API reference:
+    - Configuration: reference/configuration.md
   - Contribution:
     - How to contribute: contribution/to-source-code-guide.md
     - Code conventions: contribution/code-conventions-guide.md
