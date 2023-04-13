@@ -1,0 +1,102 @@
+name: linters
+
+on:
+
+  push:
+    paths-ignore:
+      - .run/
+      - .coveragerc
+      - .gitignore
+      - CHANGELOG.md
+      - CONTRIBUTING.md
+      - LICENSE
+      - mkdocs.yml
+      - README.md
+      - .github/workflows/deploy-mkdocs-poetry.yml
+      - .github/workflows/publish.yml
+      - .github/workflows/tests.yml
+      - .github/workflows/traffic2badge.yml
+      - .github/FUNDING.yml
+
+  pull_request:
+    paths-ignore:
+      - .run/
+      - .coveragerc
+      - .gitignore
+      - CHANGELOG.md
+      - CONTRIBUTING.md
+      - LICENSE
+      - mkdocs.yml
+      - README.md
+      - .github/workflows/deploy-mkdocs-poetry.yml
+      - .github/workflows/publish.yml
+      - .github/workflows/tests.yml
+      - .github/workflows/traffic2badge.yml
+      - .github/FUNDING.yml
+
+jobs:
+
+  Black:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.7'
+      - run: |
+          pip install black
+          .run/lint_black.sh
+
+  Pycodestyle:
+    name: Lint Pycodestyle
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.7'
+      - name: Pycodestyle
+        run: |
+          pip install pycodestyle
+          .run/lint_pycodestyle.sh
+
+  Pylint:
+    name: Lint Pylint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.7'
+      - name: Pylint
+        run: |
+          pip install pylint
+          .run/lint_pylint.sh
+
+  Pylint-full-report:
+    name: Lint Pylint Full Report
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.7'
+      - name: Pylint Full Report
+        run: |
+          pip install pylint
+          touch __init__.py
+          pylint $(pwd) --disable="" --ignore-patterns=.venv --exit-zero
+          rm __init__.py
+
+  Mypy:
+    name: Mypy
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.7'
+      - name: Mypy
+        run: |
+          pip install mypy
+          .run/lint_mypy.sh

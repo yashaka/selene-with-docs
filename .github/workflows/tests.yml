@@ -1,0 +1,113 @@
+name: tests
+
+on:
+
+  push:
+    paths-ignore:
+      - .run/
+      - examples/
+      - .coveragerc
+      - .gitignore
+      - .pylint-disabled-rules
+      - CHANGELOG.md
+      - CONTRIBUTING.md
+      - LICENSE
+      - mkdocs.yml
+      - README.md
+      - .github/workflows/deploy-mkdocs-poetry.yml
+      - .github/workflows/linters.yml
+      - .github/workflows/publish.yml
+      - .github/workflows/traffic2badge.yml
+      - .github/FUNDING.yml
+
+  pull_request:
+    paths-ignore:
+      - .run/
+      - examples/
+      - .coveragerc
+      - .gitignore
+      - .pylint-disabled-rules
+      - CHANGELOG.md
+      - CONTRIBUTING.md
+      - LICENSE
+      - mkdocs.yml
+      - README.md
+      - .github/workflows/deploy-mkdocs-poetry.yml
+      - .github/workflows/linters.yml
+      - .github/workflows/publish.yml
+      - .github/workflows/traffic2badge.yml
+      - .github/FUNDING.yml
+
+jobs:
+
+  test:
+    runs-on: ubuntu-latest
+    env:
+      DISPLAY: ":99"
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      selenoid_login: ${{ secrets.SELENOID_LOGIN }}
+      selenoid_password: ${{ secrets.SELENOID_PASSWORD }}
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [ '3.7', '3.11' ]
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: technote-space/get-diff-action@v5
+        with:
+          PATTERNS: |
+            +(selene|tests)/**/*.py
+          FILES: |
+            poetry.lock
+            tests.yml
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+        if: env.GIT_DIFF
+
+      # can be packaged as Docker-image
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install poetry
+          poetry install
+        if: env.GIT_DIFF
+
+      # can be packaged as Docker-image; p.s.: no need to install chrome or firefox on github-actions
+      - name: Install xvfb
+        run: |
+          sudo apt-get update
+          sudo apt-get install xvfb
+          sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
+        if: env.GIT_DIFF
+
+      - name: Tests
+        run: |
+          poetry run pytest -sv --cov-config .coveragerc --cov-report html:skip-covered --cov-report term:skip-covered --cov=selene  --cov-report xml:coverage.xml --tb=short tests/ --headless=True
+          mkdir -p Artifacts/skip-covered
+          cp -r skip-covered Artifacts/skip-covered
+        if: env.GIT_DIFF
+
+      # can be improved by flags/options
+#      - name: Code Coverage
+#        uses: codecov/codecov-action@v3
+#        with:
+#          file: ./coverage.xml # optional
+#          name: selene-codecov # optional
+#          fail_ci_if_error: true # optional (default = false)
+#          verbose: true
+#        if: env.GIT_DIFF
+
+#      # can be organized better
+#      - name: Upload pytest test results
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: Code coverage
+#          path: |
+#            Artifacts
+#            coverage.xml
+#        if: env.GIT_DIFF

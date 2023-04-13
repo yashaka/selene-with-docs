@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "selene"
-version = "2.0.0b14"
+version = "2.0.0rc2"
 description = "User-oriented browser tests in Python (Selenide port)"
 authors = ["Iakiv Kramarenko <yashaka@gmail.com>"]
 license = "MIT"
@@ -39,6 +39,7 @@ packages = [
 	{include = "selene/support"},
 	{include = "selene/support/shared"},
 	{include = "selene/support/conditions"},
+	{include = "selene/py.typed"}
 ]
 
 [tool.poetry.urls]
@@ -46,18 +47,21 @@ Changelog = "https://github.com/yashaka/selene/releases"
 
 [tool.poetry.dependencies]
 python = "^3.7"
-selenium = "==4.4.3"
+selenium = ">=4.4.3"
 future = "*"
-webdriver-manager = "==3.8.3"
+webdriver-manager = ">=3.8.5"
 typing-extensions = "==4.3.0"
 
 [tool.poetry.dev-dependencies]
-black = "^22.3.0"
+black = "^23.3.0"
 pycodestyle = "*"
 pylint = "^2.7.2"
 pytest = "*"
 pytest-cov = "*"
-codecov = "*"
+mypy = "*"
+pydantic = "^1.10.7"
+python-dotenv = "0.21.1"
+Appium-Python-Client = "^2.9.0"
 
 [tool.poetry.group.docs]
 optional = true
@@ -73,8 +77,18 @@ mkdocs-git-revision-date-localized-plugin = "^1.2.0"
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
+[tool.mypy]
+disable_error_code = 'annotation-unchecked'
+allow_redefinition = true  # TODO: how to properly make it work o_O ?
+color_output=1
+exclude = [
+    '^test_.+\.py$',
+	'^.+_test\.py$',
+]
+
+
 [tool.black]
-line-length = 79
+line-length = 88
 target-version = ['py37']
 skip-string-normalization = 1
 
@@ -90,6 +104,20 @@ skip-string-normalization = 1
 	[tool.pylint.'MESSAGES CONTROL']
 	enable=['c-extension-no-member']
 	disable=['''no-else-return,
+		import-outside-toplevel,
+		too-many-locals,
+		too-many-lines,
+		invalid-name,
+		not-callable,
+		unused-argument,
+		protected-access,
+		pointless-string-statement,
+		too-few-public-methods,
+		too-many-public-methods,
+		redefined-outer-name,
+	    missing-class-docstring,
+	    missing-module-docstring,
+	    missing-function-docstring,
         no-else-raise,
         print-statement,
         parameter-unpacking,
@@ -189,7 +217,7 @@ skip-string-normalization = 1
 	spelling-store-unknown-words=['no']
 
 	[tool.pylint.'MISCELLANEOUS']
-	notes=['FIXME,XXX,TODO']
+	notes=['FIXME,XXX']
 
 	[tool.pylint.'TYPECHECK']
 	contextmanager-decorators=['contextlib.contextmanager']
@@ -213,7 +241,7 @@ skip-string-normalization = 1
 	ignore-long-lines=['^\s*(# )?<?https?://\S+>?$']
 	indent-after-paren=4
 	indent-string='    '
-	max-line-length=79
+	max-line-length=88
 	max-module-lines=1000
 	single-line-class-stmt=['no']
 	single-line-if-stmt=['no']
@@ -266,7 +294,7 @@ skip-string-normalization = 1
 	max-parents=7
 	max-public-methods=20
 	max-returns=6
-	max-statementts=50
+	max-statements=80
 	min-public-methods=2
 
 	[tool.pylint.'EXCEPTIONS']

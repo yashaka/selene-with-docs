@@ -61,9 +61,9 @@ AND::
 
 """
 
-from selene import managed
+from selene import _managed  # noqa
 
-browser = managed.browser
+browser = _managed.browser
 
 from selene.support import by as _by_style_selectors  # noqa
 
@@ -138,7 +138,7 @@ e.g. for workaround something through js::
 from selene.core import query as _advanced_queries  # noqa
 
 query = _advanced_queries
-# its = _advanced_queries  # todo: do we really need it too? for better readability: .get(its.text)
+# its = _advanced_queries  # TODO: do we really need it too? for better readability: .get(its.text)
 """
 Probably you think that will need something like::
 
@@ -227,4 +227,4 @@ Or, by using non-waiting versions, if "you are in a rush:)"::
 # """
 from selene.core.entity import Element, Collection  # noqa
 
-__version__ = '2.0.0b14'
+__version__ = '2.0.0rc2'

@@ -9,6 +9,8 @@ skip-covered/
 tests/comparison/
 examples/test_anything.py
 custom.png
+custom.html
+*.apk
 
 # allure
 allure-results/
@@ -81,6 +83,7 @@ coverage.xml
 .hypothesis/
 **/.pytest_cache/
 cover/
+Test Results*
 
 # Translations
 *.mo

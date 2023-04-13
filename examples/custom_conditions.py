@@ -20,11 +20,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from selene import Browser, have
+from selene import browser, Browser, have
 from selene.core.condition import Condition
 from selene.core.conditions import ElementCondition, BrowserCondition
 from selene.core.entity import Element
-from selene.support.shared import browser
 
 
 def have_produced_todos(number: int) -> Condition[Element]:
@@ -60,9 +59,7 @@ def test_wait_for_produced_todos_v2():
 
 
 def test_wait_for_notification_after_reload_v1():
-    browser.open(
-        'https://the-internet.herokuapp.com/notification_message_rendered'
-    )
+    browser.open('https://the-internet.herokuapp.com/notification_message_rendered')
 
     def assert_action_successful_on_reload(entity):
         browser.element('[href*=notification_message]').click()
@@ -80,9 +77,7 @@ def test_wait_for_notification_after_reload_v2():
     more descriptive implementation
     with custom rendering of error message on failure
     """
-    browser.open(
-        'https://the-internet.herokuapp.com/notification_message_rendered'
-    )
+    browser.open('https://the-internet.herokuapp.com/notification_message_rendered')
 
     def assert_action_successful_on_reload(entity):
         browser.element('[href*=notification_message]').click()
@@ -120,9 +115,7 @@ def test_wait_for_notification_after_reload_v3():
     - that should be browser
       if condition was called on a browser object
     """
-    browser.open(
-        'https://the-internet.herokuapp.com/notification_message_rendered'
-    )
+    browser.open('https://the-internet.herokuapp.com/notification_message_rendered')
 
     def notification_on_reload(message: str) -> BrowserCondition:
         def fn(entity: Browser):
@@ -155,9 +148,7 @@ def test_wait_for_notification_after_reload_v4():
     """
     with default rendering (built into selene's condition) of error message on failure
     """
-    browser.open(
-        'https://the-internet.herokuapp.com/notification_message_rendered'
-    )
+    browser.open('https://the-internet.herokuapp.com/notification_message_rendered')
 
     def assert_action_successful_on_reload(entity):
         browser.element('[href*=notification_message]').click()
@@ -171,9 +162,7 @@ def test_wait_for_notification_after_reload_v5():
     with default rendering (built into selene's condition) of error message on failure
     AND simplified syntax with lambdas
     """
-    browser.open(
-        'https://the-internet.herokuapp.com/notification_message_rendered'
-    )
+    browser.open('https://the-internet.herokuapp.com/notification_message_rendered')
 
     browser.wait.for_(
         lambda _: (
@@ -189,9 +178,7 @@ def test_wait_for_notification_after_reload_v6():
     and simplified syntax with lambdas
     AND with optimised performance and removed potential side effects of "nested waiting"
     """
-    browser.open(
-        'https://the-internet.herokuapp.com/notification_message_rendered'
-    )
+    browser.open('https://the-internet.herokuapp.com/notification_message_rendered')
 
     browser.wait.for_(
         lambda _: (

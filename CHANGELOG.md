@@ -1,115 +1,370 @@
 # Changelog
 
-## next
-- consider adding config.quit_user_driver_on_exit (maybe even True by default, maybe not...)
+## > 2.0.0 release
+
+TODOs:
+
+- `config.quit_last_driver_on_reset` (`False` by default)?
+- improve for other `all.*` methods (in addition to improved errors from `browser.all.element_by`)
+- why in the past we had when outer_html this: `'<button class="destroy" type="submit" displayed:false></button>'`
+  - but now we have this: `'<button class="destroy" type="submit"></button>'?`
+    - can we improve it?
+- add something like `element.click_with_offset`
+- consider adding hold_driver_open_at_exit_on_failure
 - case insensitive versions of conditions like have.attribute(...).value(...)
   - experimental impl was already added in 2.0.0a16
-- consider making have.size to work with elements too...
+- consider adding more readable alias to by tuple, like in:
+  `css_or_xpath_or_by: Union[str, tuple]`
+- improve error messages
+  - should we come back to the "actual vs expected" style in error messages?
+- improve stacktraces
+  - consider using something like `__tracebackhide__ = True`
+- what about ActionChains?
+  - with retries?
+- what about soft assertions in selene?
 - maybe somewhen in 3.0 consider adding selene.support.shared.selenide module
   - with selenide style api
     - like s, ss, open_url
     - SelenideElement#find, #find_all
     - ElementsCollection#find, #filter, #get
     - etc.
-- what about ActionChains?
-  - with retries?
-- what about soft assertions in selene?
-- improve stacktraces
-  - consider using something like `__tracebackhide__ = True`
-- consider adding more readable alias to by tuple, like in:
-  `css_or_xpath_or_by: Union[str, tuple]`
-- what about `element('#go-forward').with_(retry = (times=2, dismiss_element='#confirm')).click()`?
-  - and even `browser.element('#loading-bar').with(condition=lambda: element('#loading-bar').matching(be.visible)).should(be.hidden)`
-    - or even browser.when.element('#loading-bar', matching=be.visible).then.element('#loading-bar').should(be.hidden)
-    - how in such case the '#loading-bar' can be reused as element?
-  - other ideas
-    - custom action condition
-      - element('#can-be-not-ready').when.click().then.element('#some-new-element').should(be.visible)
-      - element('#can-be-not-ready').with_(hook_wait=lambda: be.visible(element('#some-new-element))).click()
-- improve error messages
-  - should we come back to the "actual vs expected" style in error messages?
-  
-## 2.0.1
-- add hooks
-- refine API  
-  - remove deprecated things
 
-## 2.0.0rc1 (to be released on .??.2022)
-- remove all deprecated things and stay calm:)
-- or maybe remove all deprecated stuff only in 3.0?
+## < 2.0.0 release ? o_O
 
-## 2.0.0bNEXT (to be released on ??.??.2022)
-- config.browser_name -> config.name was bad idea
-  - but config.executor accepting both 'chrome'/'firefox' or 'http://<remoteurl>'
-    - might be a good idea... think on it... 
-- DOING: update docs
-- GIVEN some.should(be.visible) and another.with_(timeout=2).should(be.visible)
-  AND some test fixture logging last_screenshot from shared.config.last_screenshot
-  WHEN some failed THEN the logging will work
-  WHEN another failed THEN the logging will log nothing, 
-    BECAUSE another has it's own config with its own last_screenshot source
-    
-  - todo: fix?
-- todo consider adding element.caching as lazy version of element.cached
-- consider adding hold_browser_opened_on_failure
-- consider browser.open() over browser.open('') (use some smart defaults)
-- consider config.headless = False like in selenide 
-  - `this.browser = new Browser(config.browser(), config.headless());`
-  
-## 2.0.0b2x+1 (to be released on ?.??.2022)
-- todo: add something like `element.click_with_offset`
-- todo: add something like `browser.perform(switch_to_tab('my tab title'))`
-  - maybe make browser.switch ... to work with retry logic
-    or make separate command.switch...
+TODOs:
+
+- manager or executor at `config._executor`?
+- deprecate config.wait(entity) factory?
+  - isn't it enough to have `config._build_wait_strategy(entity)`?
+- decide on `config._reset_not_alive_driver_on_get_url` name
+  - reset vs rebuild?
+  - etc?
+- decide on None as default in managed driver descriptor instead of ...
+  taking into account that mypy does not like it
+  - actually I tend to keep both `...` and `None`, yet using `...` as default
+    in Selene's internals. But let's document this at least. 
+    Mentioning also this: https://github.com/python/mypy/issues/7818
+- consider a way to customize "locator description" [#439](https://github.com/yashaka/selene/issues/439)
+  - consider storing "raw selector" of locator to be able to log it as it is [#438](https://github.com/yashaka/selene/issues/438)
+  - consider storing `locator.name` and take it from class attribute name if Element object
+    is used as descriptor (via `__set_name__` impl.)
+    - while being a descriptor...
+      check if `hassattr(owner, 'element')` (or context, or container?)
+      then consider starting the search from the context 
+      and make this configurable via `config.search_from_defined_context = True`
+      (probably `False` by default)
+      and being able to override somehow on element definition level
 - ensure we can't element.type on invisible element; add test for that
-- use `__all__` in selene api imports, etc
-  - The variable `__all__` is a list of public objects of that module, as interpreted by import *. ... In other words, __all__ is a list of strings defining what symbols in a module will be exported when from <module> import * is used on the module
-
-  
-## 2.0.0b2x (to be released on ?.0?.2022)
-- todo: improve for other `all.*` methods (in addition to improved errors from `browser.all.element_by`)
-- todo: why in the past we had when outer_html this: `'<button class="destroy" type="submit" displayed:false></button>'`
-  - but now we have this: `'<button class="destroy" type="submit"></button>'?`
-    - can we improve it?
-- add `browser.all('.item').last`?
-- make `browser.switch_to.frame` to accept element
+- decide on have.size vs query.size
+  - consider making have.size to work with elements too...
+- review all `# type: ignore`
+- review all typing.cast
+- fix «too much screenshots»? if can reproduce
+- what about accepting None as locator of Element?
+  in such case it such element will just do nothing regardless of what command is called on it
+  - even better, we can accept Locators in browser.element(here)!!!
+    and so we can implement own behavior, locating some kind of proxy that skips all commands!
 - deprecate `be.present`
-- repeat fix of #225 to other options in shared config, refactor it... 
-  - should we make original config (not shared) mutable?
+- todo consider adding element.caching as lazy version of element.cached
+- use `__all__` in selene api imports, etc
+  - The variable `__all__` is a list of public objects of that module, as interpreted by `import *`. ... In other words, `__all__` is a list of strings defining what symbols in a module will be exported when `from module import *` is used on the module
+- config.driver_proxy or config.driver_remote_proxy?
 
-- TODO: config.location_strategy
+## 2.0.0rc? (to be released on ??.??.2023)
 
-## 2.0.0rc1 (to be released on ?.10.2022)
+TODOs:
 
-- added `from selene import browser`
-  - kind of «moved» `selene.support.shared.browser` to `selene.browser`
-- deprecated 
-  - shared.browser.config.get_or_create_driver
-  - shared.browser.config.reset_driver
-    - use `selene.browser.config.driver = ...`
-- removed deprecated 
-  - shared.browser.config.desired_capabilities
-  - shared.browser.config.start_maximized
-  - shared.browser.config.start_maximized
-  - shared.browser.config.cash_elements
-  - shared.browser.config.quit_driver
-  - shared.browser.latest_page_source
-  - shared.browser.quit_driver
-  - shared.browser.set_driver
-  - shared.browser.open_url
-  - shared.browser.elements
-  - shared.browser.wait_to
-  - shared.browser.title
-  - shared.browser.take_screenshot
-- removed not deprecated
-  - shared.browser.config.Source
-    - renamed to shared.browser.config._Source. 
-      Currently, is used nowhere in Selene
-  - shared.browser.config.set_driver (getter and setter)
-  - shared.browser.config.counter
-    - use shared.browser.config._counter instead, and better – not use it;)
-  - shared.browser.config.generate_filename
-    - use shared.browser.config._generate_filename instead, and better – not use it;)
+* implement run_cross_platform_with_fixture_and_custom_location_strategy example with:
+  * location strategy
+  * element actions logging to allure
+  * jenkins pipeline with matrix job
+* deprecate browser.switch_to?
+  * add corresponding set of commands to be used as waiting commands via `browser.perform` 
+    * make `command.switch_to_frame` to accept selene element?
+    - add something like `browser.perform(switch_to_tab('my tab title'))`
+          - maybe make browser.switch ... to work with retry logic
+            or make separate command.switch...
+
+## 2.0.0rc2 (to be released on 13.04.2023)
+
+### Driver is guessed by config.driver_options too
+
+Before:
+
+  * `config.driver_name` was `'chrome'` by default
+
+Now:
+
+  * `config.driver_name` is `None` by default
+    * and means "desired requested driver name"
+  * setting `config.driver_options` usually is enough to guess the driver name,
+    e.g., just by setting `config.driver_options = FirefoxOptions()`
+    you already tell Selene to build Firefox driver.
+
+### config.driver_service 
+
+Just in case you want, e.g. to use own driver executable like:
+
+```python
+from selene import browser
+from selenium.webdriver.chrome.service import Service
+from selenium import webdriver
+
+browser.config.driver_service = Service('/path/to/my/chromedriver')
+chrome_options = webdriver.ChromeOptions()
+chrome_options.add_argument('--headless')
+browser.config.driver_options = chrome_options
+```
+
+## 2.0.0rc1.post1 (to be released on ??.??.2023)
+
+* allow guessing local driver name based on config.driver_options
+* examples with specifying binary location for driver, ignoring wdm
+
+## 2.0.0rc1 (released on 11.04.2023)
+
+### Changes
+
+#### Any custom driver will now be automatically quit at exit
+
+Any driver instance passed to `browser.config.driver` will be automatically quit at exit, unless `browser.config.hold_driver_at_exit = True`, that is `False` by default
+
+#### Manually set driver can be still automatically rebuilt on next call to browser.open(url)
+
+... if happened to be not alive, e.g. after quit or crash. This was relevant in the past, but not for manually set drivers. Not it works for all cases by default, including manually set driver by `browser.config.driver = my_driver_instance`. To disable this behavior set `browser.config._reset_not_alive_driver_on_get_url = False` (currently this option is still marked as experimental with `_` prefix, it may be renamed till final 2.0 release).
+
+Once automatic rebuild is disabled, you can schedule rebuild on next access to driver by setting `browser.config.driver = ...` (besides ellipsis, setting to `None` also works). This is actually what is done inside `browser.open(url)` if `browser.config._reset_not_alive_driver_on_get_url = True` and driver is not alive.
+
+There is another "rebuild" option in config that is disabled by default: `browser.config.rebuild_not_alive_driver`. It is used to rebuild driver on **any** next access to it, if it is not alive. This is different from `browser.config._reset_not_alive_driver_on_get_url` that resets driver (scheduling to be rebuilt) **only** on next call to `browser.open(url)`. Take into account that enabling this option may leed to slower tests when running on remote drivers, because it will check if driver is alive on any access to it, not only on `browser.open(url)`.
+
+
+#### «browser» term is deprecated in a lot of places
+
+... except `Browser` class itself, of course (but this might be changed somewhere in 3.0🙃)
+
+For example, `config.browser_name` is deprecated in favor of `config.driver_name`. Main reason – «browser» term is not relevant to mobile testing, where in a lot of cases we test user actions in app, not browser.
+
+### New
+
+#### `from selene import browser`
+
+– to be used instead of `from selene.support.shared import browser`. 
+
+No difference between Config and SharedConfig anymore. The new, completely refactored, Config is now used everywhere and allows to customize browser instance in a more convenient way.
+
+Adds ability to use `browser.with_(**config_options_to_override)` to create new browser instance, for example: 
+     
+```python
+from selene import browser
+
+chrome = browser
+firefox = browser.with_(driver_name='firefox')
+edge = browser.with_(driver_name='edge')
+...
+# customizing all browsers at once:
+browser.config.timeout = 10
+```
+  
+as alternative to:
+    
+```python
+from selene import Browser, Config
+
+chrome = Browser(Config())
+firefox = Browser(Config(driver_name='firefox'))
+edge = Browser(Config(driver_name='edge'))
+
+...
+
+# customizing all browsers:
+chrome.config.timeout = 10
+firefox.config.timeout = 10
+edge.config.timeout = 10
+```
+
+#### `browser.config.driver_options` + `browser.config.driver_remote_url`
+
+Finally, you can delegate building driver to config manager by passing `driver_options` and `driver_remote_url` to it:
+
+```python
+import dotenv
+from selenium import webdriver
+from selene import browser, have
+
+
+def test_complete_task():
+  options = webdriver.ChromeOptions()
+  options.browser_version = '100.0'
+  options.set_capability(
+    'selenoid:options',
+    {
+      'screenResolution': '1920x1080x24',
+      'enableVNC': True,
+      'enableVideo': True,
+      'enableLog': True,
+    },
+  )
+  browser.config.driver_options = options  # <- 🥳
+  project_config = dotenv.dotenv_values()
+  browser.config.driver_remote_url = (  # <- 🎉🎉🎉
+    f'https://{project_config["LOGIN"]}:{project_config["PASSWORD"]}@'
+    f'selenoid.autotests.cloud/wd/hub'
+  )
+
+  browser.open('http://todomvc.com/examples/emberjs/')
+  browser.should(have.title_containing('TodoMVC'))
+
+  browser.element('#new-todo').type('a').press_enter()
+  browser.element('#new-todo').type('b').press_enter()
+  browser.element('#new-todo').type('c').press_enter()
+  browser.all('#todo-list>li').should(have.exact_texts('a', 'b', 'c'))
+```
+
+#### `browser.open()` without args
+
+Will just open driver or do nothing if driver is already opened.
+
+Can also load page from `browser.config.base_url` if it is set and additional experimental `browser.config._get_base_url_on_open_with_no_args = True` option is set (that is `False` by default).
+
+#### Automatic driver rebuilding still happens on `browser.open`, but...
+
+but can be configured as follows:
+
+* can be disabled by setting `browser.config.__reset_not_alive_driver_on_get_url = False`,
+  that is `True` by default
+* can be enabled on any explicit or implicit call to `browser.config.driver`,
+  if set `browser.config.rebuild_not_alive_driver = True` (that is `False` by default)
+
+#### Appium support out of the box:)
+
+Yet you have to install it manually. But given installed via `pip install Appium-Python-Client` or something like `poetry add Appium-Python-Client`, running tests on mobile devices is as easy as...
+
+##### Running locally against Appium server:
+
+```python
+from appium.options.android import UiAutomator2Options
+from appium.webdriver.common.appiumby import AppiumBy
+from selene import browser, have
+
+android_options = UiAutomator2Options()
+android_options.new_command_timeout = 60
+android_options.app = 'wikipedia-alpha-universal-release.apk'
+android_options.app_wait_activity = 'org.wikipedia.*'
+browser.config.driver_options = android_options
+# # Possible, but not needed, because will be used by default:
+# browser.config.driver_remote_url = 'http://127.0.0.1:4723/wd/hub'
+
+by_id = lambda id: (AppiumBy.ID, f'org.wikipedia.alpha:id/{id}')
+
+# GIVEN
+browser.open()
+browser.element(by_id('fragment_onboarding_skip_button')).click()
+
+# WHEN
+browser.element((AppiumBy.ACCESSIBILITY_ID, 'Search Wikipedia')).click()
+browser.element(by_id('search_src_text')).type('Appium')
+
+# THEN
+browser.all(by_id('page_list_item_title')).should(
+  have.size_greater_than(0)
+)
+```
+
+##### Running remotely against Browserstack server:
+
+```python
+from appium.options.android import UiAutomator2Options
+from appium.webdriver.common.appiumby import AppiumBy
+from selene import browser, have
+
+options = UiAutomator2Options()
+options.app = 'bs://c700ce60cf13ae8ed97705a55b8e022f13c5827c'
+options.set_capability(
+  'bstack:options',
+  {
+    'deviceName': 'Google Pixel 7',
+    'userName': 'adminadminovych_qzqzqz',
+    'accessKey': 'qzqzqzqzqzqzqzqzqzqz',
+  },
+)
+browser.config.driver_options = options
+browser.config.driver_remote_url = 'http://hub.browserstack.com/wd/hub'
+
+by_id = lambda id: (AppiumBy.ID, f'org.wikipedia.alpha:id/{id}')
+
+# GIVEN
+browser.open()  # not needed, but to explicitly force appium to open app
+
+# WHEN
+browser.element((AppiumBy.ACCESSIBILITY_ID, 'Search Wikipedia')).click()
+browser.element(by_id('search_src_text')).type('Appium')
+
+# THEN
+browser.all(by_id('page_list_item_title')).should(
+  have.size_greater_than(0)
+)
+
+```
+
+#### A lot of other local, remote and mobile test examples at...
+
+https://github.com/yashaka/selene/tree/master/examples
+
+#### autocomplete for entity.with_(HERE)
+
+### Other
+
+#### Deprecated 
+
+- `browser.save_screenshot` in favor of `browser.get(query.screenshot_saved())`
+- `browser.save_page_source` in favor of `browser.get(query.page_source_saved())`
+- `browser.last_screenshot` in favor of `browser.config.last_screenshot`
+- `browser.last_page_source` in favor of `browser.config.last_page_source`
+- `match.browser_has_js_returned` in favor of `match.browser_has_script_returned`
+- `have.js_returned` in favor of `have.script_returned`
+- `have.js_returned_true(...)` in favor of `have.script_returned(True, ...)`
+- `browser.config.get_or_create_driver`
+- `browser.config.reset_driver`
+  - use `selene.browser.config.driver = ...`
+- `browser.config.browser_name` in favor of `browser.config.driver_name`
+
+#### Removed
+
+- from selene.support.shared import SharedConfig, SharedBrowser
+- from selene.core.entity import BrowserCondition, ElementCondition, CollectionCondition 
+
+#### Removed deprecated 
+- shared.browser.config.desired_capabilities
+- shared.browser.config.start_maximized
+- shared.browser.config.start_maximized
+- shared.browser.config.cash_elements
+- shared.browser.config.quit_driver
+- shared.browser.latest_page_source
+- shared.browser.quit_driver
+- shared.browser.set_driver
+- shared.browser.open_url
+- shared.browser.elements
+- shared.browser.wait_to
+- shared.browser.title
+- shared.browser.take_screenshot
+- jquery_style_selectors
+
+#### Removed not deprecated
+
+- shared.browser.config.Source
+  - renamed to shared.browser.config._Source. 
+    Currently, is used nowhere in Selene
+- shared.browser.config.set_driver (getter and setter)
+- shared.browser.config.counter
+  - use shared.browser.config._counter instead, and better – not use it;)
+- shared.browser.config.generate_filename
+  - use shared.browser.config._generate_filename instead, and better – not use it;)
+
+## 2.0.0b15-b17
+
+### Dependencies
+- update selenium (with weakened dependency to >=4.4.3)
+- update webdriver_manager (with weakened dependency to >=3.8.5)
 
 ## 2.0.0b14 (released on 06.10.2022)
 
@@ -336,6 +591,7 @@ see reasons at:
 ### NEW: `browser.all(selector).by(condition)` to filter collection
 
 ```python
+import examples.run_cross_platform.wikipedia_e2e_tests.utils.locators
 from selene.support.shared import browser
 from selene import have
 
@@ -344,10 +600,10 @@ browser.element('#new-todo').type('a').press_enter()
 browser.element('#new-todo').type('b').press_enter()
 browser.element('#new-todo').type('c').press_enter()
 
-browser.all('#todo-list>li').by(have.text('b')).first.element('.toggle').click()
+examples.run_cross_platform.wikipedia_e2e_tests.utils.locators.by(have.text('b')).first.element('.toggle').click()
 
-browser.all('#todo-list>li').by(have.css_class('active')).should(have.texts('a', 'c'))
-browser.all('#todo-list>li').by(have.no.css_class('active')).should(have.texts('b'))
+examples.run_cross_platform.wikipedia_e2e_tests.utils.locators.by(have.css_class('active')).should(have.texts('a', 'c'))
+examples.run_cross_platform.wikipedia_e2e_tests.utils.locators.by(have.no.css_class('active')).should(have.texts('b'))
 ```
 
 Hence, considering to deprecate:
@@ -719,7 +975,7 @@ Contributors release.
   - if actually webelement was found, but something was wrong with it (like hidden or non-interactable)
   
 - improved errors from browser.all.element_by
-  - todo: improve for other all.* methods
+  - TODO: improve for other all.* methods
 
 was:
 
@@ -1173,10 +1429,10 @@ results.element_by(
 ## 1.0.0a3 (next from master branch)
   - improvements:
     - error messages are cleaner
-      - todo: still lacks proper test coverage of all cases...
+      - TODO: still lacks proper test coverage of all cases...
   - internal
     - refactored wait_for implementation, made it cleaner
-      - todo: still need to refactor condition implementation
+      - TODO: still need to refactor condition implementation
     
 ## 1.0.0a2 (not published, available via direct install from sources)
 - new features:

@@ -21,10 +21,8 @@
 # SOFTWARE.
 import warnings
 
-from selene import managed
+from selene.core.configuration import Config
 
 
-class SharedConfig(managed.Config):
-    warnings.warn(
-        'SharedConfig is deprecated. Use _Config instead', DeprecationWarning
-    )
+class SharedConfig(Config):
+    warnings.warn('SharedConfig is deprecated. Use Config instead', DeprecationWarning)

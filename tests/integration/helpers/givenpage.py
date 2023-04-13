@@ -20,14 +20,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import os
+from tests import resources
 from tests.helpers import convert_sec_to_ms
 
-EMPTY_PAGE_URL = (
-    'file://'
-    + os.path.abspath(os.path.dirname(__file__))
-    + '/../../resources/empty.html'
-)
+EMPTY_PAGE_URL = resources.url('empty.html')
 
 
 class LoadingHtmlPage:
@@ -77,9 +73,7 @@ class GivenPage:
         self._driver = driver
 
     def load_body_with_timeout(self, body, timeout):
-        return LoadedHtmlPage(self._driver).render_body_with_timeout(
-            body, timeout
-        )
+        return LoadedHtmlPage(self._driver).render_body_with_timeout(body, timeout)
 
     def opened_with_body_with_timeout(self, body, timeout):
         return LoadingHtmlPage(timeout, body).load_in(self._driver)
@@ -94,6 +88,4 @@ class GivenPage:
         return LoadedHtmlPage(self._driver).render_body(body)
 
     def execute_script_with_timeout(self, script, timeout):
-        LoadedHtmlPage(self._driver).execute_script_with_timeout(
-            script, timeout
-        )
+        LoadedHtmlPage(self._driver).execute_script_with_timeout(script, timeout)

@@ -22,14 +22,12 @@
 
 from future.utils import iteritems
 
-from selene.core.entity import Element
-from selene.support.conditions import be, have
-from selene.support.shared import browser
+from selene import browser, be, have, Element
 
 
 class SelectList:
-    def __init__(self, element):
-        self._element: Element = element
+    def __init__(self, element: Element):
+        self._element = element
 
     def open(self):
         self._element.click()
@@ -62,7 +60,7 @@ def merge(*dict_args):
     return result
 
 
-class Fields:  # todo: rename to Fields?
+class Fields:  # TODO: rename to Fields?
     def __init__(self, element):
         self._element = element
 
@@ -80,7 +78,7 @@ class Fields:  # todo: rename to Fields?
         opts = {} if not opts else opts
         list_of_opts = [merge(opts, opts_as_kwargs)] + list(other_opts)
         for options in list_of_opts:
-            for (field, value) in iteritems(options):
+            for field, value in iteritems(options):
                 getattr(self._element, field).set_value(value)
         return self
 
@@ -129,9 +127,7 @@ class Order:
                 self.advanced_options_selector = self.AdvancedOptionsSelector(
                     self._container.s('.advanced_options_selector')
                 )
-                self.show_advanced_options = container.s(
-                    '.show_advanced_options'
-                )
+                self.show_advanced_options = container.s('.show_advanced_options')
                 self.advanced_options = self.AdvancedOptions(
                     self._container.ss('.advanced_options .options_list li')
                 )
@@ -144,24 +140,16 @@ class Order:
 
             def add_advanced_options(self, *options_data):
                 for filter_data in options_data:
-                    self.advanced_options_selector.add_filter_with(
-                        *filter_data
-                    )
+                    self.advanced_options_selector.add_filter_with(*filter_data)
                 self.advanced_options_selector.apply_filtered_options.click()
                 return self
 
             class AdvancedOptionsSelector:
                 def __init__(self, container):
                     self._container = container
-                    self.add_options_filter = container.s(
-                        '.add_options_filter'
-                    )
-                    self.apply_filtered_options = container.s(
-                        '.apply_filtered_options'
-                    )
-                    self.filters_elements = container.ss(
-                        '[id^="options_filter"]'
-                    )
+                    self.add_options_filter = container.s('.add_options_filter')
+                    self.apply_filtered_options = container.s('.apply_filtered_options')
+                    self.filters_elements = container.ss('[id^="options_filter"]')
 
                 def filter(self, index):
                     return self.OptionsFilter(self.filters_elements[index])
@@ -193,5 +181,5 @@ class Order:
 
             class AdvancedOption:
                 def __init__(self):
-                    # todo: implement...
+                    # TODO: implement...
                     pass

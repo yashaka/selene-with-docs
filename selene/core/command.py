@@ -19,17 +19,46 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-from typing import Union
+from typing import Union, Optional
 
-from selene.core.entity import Element
+from selene.core.entity import Element, Collection, Browser
 from selene.core.wait import Command
 
 
-# noinspection PyPep8Naming
-class js:
+def save_screenshot(path: Optional[str] = None) -> Command[Browser]:
+    command: Command[Browser] = Command(
+        'save screenshot',
+        lambda browser: browser.config._save_screenshot_strategy(browser.config, path),
+    )
+
+    if isinstance(path, Browser):
+        # somebody passed command as `.perform(command.save_screenshot)`
+        # not as `.perform(command.save_screenshot())`
+        browser = path
+        command.__call__(browser)
+
+    return command
+
+
+def save_page_source(path: Optional[str] = None) -> Command[Browser]:
+    command: Command[Browser] = Command(
+        'save page source',
+        lambda browser: browser.config._save_page_source_strategy(browser.config, path),
+    )
+
+    if isinstance(path, Browser):
+        # somebody passed command as `.perform(command.save_screenshot)`
+        # not as `.perform(command.save_screenshot())`
+        browser = path
+        command.__call__(browser)
+
+    return command
+
+
+class js:  # pylint: disable=invalid-name
     @staticmethod
     def set_value(value: Union[str, int]) -> Command[Element]:
-        def fn(element: Element):
+        def func(element: Element):
             element.execute_script(
                 """
                 var text = arguments[0];
@@ -46,11 +75,11 @@ class js:
                 str(value),
             )
 
-        return Command(f'set value by js: {value}', fn)
+        return Command(f'set value by js: {value}', func)
 
     @staticmethod
     def type(keys: Union[str, int]) -> Command[Element]:
-        def fn(element: Element):
+        def func(element: Element):
             element.execute_script(
                 """
                 textToAppend = arguments[0];
@@ -69,48 +98,40 @@ class js:
                 str(keys),
             )
 
-        return Command(f'set value by js: {keys}', fn)
+        return Command(f'set value by js: {keys}', func)
 
-    scroll_into_view = Command(
+    scroll_into_view: Command[Element] = Command(
         'scroll into view',
         lambda element: element.execute_script('element.scrollIntoView(true)'),
     )
 
-    click = Command(
+    click: Command[Element] = Command(
         'click',
+        # TODO: should we process collections too? i.e. click through all elements?
         lambda element: element.execute_script('element.click()'),
     )
 
-    clear_local_storage = Command(
+    clear_local_storage: Command[Browser] = Command(
         'clear local storage',
-        lambda browser: browser.driver.execute_script(
-            'window.localStorage.clear()'
-        ),
+        lambda browser: browser.driver.execute_script('window.localStorage.clear()'),
     )
 
-    clear_session_storage = Command(
+    clear_session_storage: Command[Browser] = Command(
         'clear local storage',
-        lambda browser: browser.driver.execute_script(
-            'window.sessionStorage.clear()'
-        ),
+        lambda browser: browser.driver.execute_script('window.sessionStorage.clear()'),
     )
 
-    remove = Command(
+    remove: Command[Union[Element, Collection]] = Command(
         'remove',
         lambda entity: (
             entity.execute_script('element.remove()')
             if not hasattr(entity, '__iter__')
-            else [
-                element.execute_script('element.remove()')
-                for element in entity
-            ]
+            else [element.execute_script('element.remove()') for element in entity]
         ),
     )
 
     @staticmethod
-    def set_style_property(
-        name: str, value: Union[str, int]
-    ) -> Command[Element]:
+    def set_style_property(name: str, value: Union[str, int]) -> Command[Element]:
         return Command(
             f'set element.style.{name}="{value}"',
             lambda entity: (
@@ -123,7 +144,7 @@ class js:
             ),
         )
 
-    set_style_display_to_none = Command(
+    set_style_display_to_none: Command[Union[Element, Collection]] = Command(
         'set element.style.display="none"',
         lambda entity: (
             entity.execute_script('element.style.display="none"')
@@ -135,7 +156,7 @@ class js:
         ),
     )
 
-    set_style_display_to_block = Command(
+    set_style_display_to_block: Command[Union[Element, Collection]] = Command(
         'set element.style.display="block"',
         lambda entity: (
             entity.execute_script('element.style.display="block"')
@@ -147,7 +168,7 @@ class js:
         ),
     )
 
-    set_style_visibility_to_hidden = Command(
+    set_style_visibility_to_hidden: Command[Union[Element, Collection]] = Command(
         'set element.style.visibility="hidden"',
         lambda entity: (
             entity.execute_script('element.style.visibility="hidden"')
@@ -159,7 +180,7 @@ class js:
         ),
     )
 
-    set_style_visibility_to_visible = Command(
+    set_style_visibility_to_visible: Command[Union[Element, Collection]] = Command(
         'set element.style.visibility="visible"',
         lambda entity: (
             entity.execute_script('element.style.visibility="visible"')

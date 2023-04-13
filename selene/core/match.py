@@ -32,7 +32,7 @@ from selene.core.conditions import (
 )
 from selene.core.entity import Collection, Element, Browser
 
-# todo: consider moving to selene.match.element.is_visible, etc...
+# TODO: consider moving to selene.match.element.is_visible, etc...
 element_is_visible: Condition[Element] = ElementCondition.raise_if_not(
     'is visible', lambda element: element().is_displayed()
 )
@@ -45,27 +45,21 @@ element_is_enabled: Condition[Element] = ElementCondition.raise_if_not(
     'is enabled', lambda element: element().is_enabled()
 )
 
-element_is_disabled: Condition[Element] = ElementCondition.as_not(
-    element_is_enabled
-)
+element_is_disabled: Condition[Element] = ElementCondition.as_not(element_is_enabled)
 
-element_is_clickable: Condition[Element] = element_is_visible.and_(
-    element_is_enabled
-)
+element_is_clickable: Condition[Element] = element_is_visible.and_(element_is_enabled)
 
 element_is_present: Condition[Element] = ElementCondition.raise_if_not(
     'is present in DOM', lambda element: element() is not None
 )
 
-element_is_absent: Condition[Element] = ElementCondition.as_not(
-    element_is_present
-)
+element_is_absent: Condition[Element] = ElementCondition.as_not(element_is_present)
 
+# TODO: how will it work for mobile?
 element_is_focused: Condition[Element] = ElementCondition.raise_if_not(
     'is focused',
-    # todo: change in the following line to element.execute_script or element.config.driver.execute_script
     lambda element: element()
-    == element._webdriver.execute_script('return document.activeElement'),
+    == element.config.driver.execute_script('return document.activeElement'),
 )
 
 
@@ -86,7 +80,7 @@ def element_has_exact_text(expected: str) -> Condition[Element]:
 
 
 def element_has_js_property(name: str):
-    # todo: should we keep simpler but less obvious name - *_has_property ?
+    # TODO: should we keep simpler but less obvious name - *_has_property ?
     def property_value(element: Element) -> str:
         return element().get_property(name)
 
@@ -112,31 +106,27 @@ def element_has_js_property(name: str):
                 predicate.includes(expected),
             )
 
-        def values(
-            self, *expected: Union[str, Iterable[str]]
-        ) -> Condition[Collection]:
-            expected = helpers.flatten(expected)
+        def values(self, *expected: Union[str, Iterable[str]]) -> Condition[Collection]:
+            expected_ = helpers.flatten(expected)
 
             return CollectionCondition.raise_if_not_actual(
-                f"has js property '{name}' with values '{expected}'",
+                f"has js property '{name}' with values '{expected_}'",
                 property_values,
-                predicate.equals_to_list(expected),
+                predicate.equals_to_list(expected_),
             )
 
         def values_containing(
             self, *expected: Union[str, Iterable[str]]
         ) -> Condition[Collection]:
-            expected = helpers.flatten(expected)
+            expected_ = helpers.flatten(expected)
 
             return CollectionCondition.raise_if_not_actual(
-                f"has js property '{name}' with values containing '{expected}'",
+                f"has js property '{name}' with values containing '{expected_}'",
                 property_values,
-                predicate.equals_by_contains_to_list(expected),
+                predicate.equals_by_contains_to_list(expected_),
             )
 
-    return ConditionWithValues(
-        str(raw_property_condition), raw_property_condition.call
-    )
+    return ConditionWithValues(str(raw_property_condition), raw_property_condition.call)
 
 
 def element_has_css_property(name: str):
@@ -144,9 +134,7 @@ def element_has_css_property(name: str):
         return element().value_of_css_property(name)
 
     def property_values(collection: Collection) -> List[str]:
-        return [
-            element.value_of_css_property(name) for element in collection()
-        ]
+        return [element.value_of_css_property(name) for element in collection()]
 
     raw_property_condition = ElementCondition.raise_if_not_actual(
         'has css property ' + name, property_value, predicate.is_truthy
@@ -167,31 +155,27 @@ def element_has_css_property(name: str):
                 predicate.includes(expected),
             )
 
-        def values(
-            self, *expected: Union[str, Iterable[str]]
-        ) -> Condition[Collection]:
-            expected = helpers.flatten(expected)
+        def values(self, *expected: Union[str, Iterable[str]]) -> Condition[Collection]:
+            expected_ = helpers.flatten(expected)
 
             return CollectionCondition.raise_if_not_actual(
-                f"has css property '{name}' with values '{expected}'",
+                f"has css property '{name}' with values '{expected_}'",
                 property_values,
-                predicate.equals_to_list(expected),
+                predicate.equals_to_list(expected_),
             )
 
         def values_containing(
             self, *expected: Union[str, Iterable[str]]
         ) -> Condition[Collection]:
-            expected = helpers.flatten(expected)
+            expected_ = helpers.flatten(expected)
 
             return CollectionCondition.raise_if_not_actual(
-                f"has css property '{name}' with values containing '{expected}'",
+                f"has css property '{name}' with values containing '{expected_}'",
                 property_values,
-                predicate.equals_by_contains_to_list(expected),
+                predicate.equals_by_contains_to_list(expected_),
             )
 
-    return ConditionWithValues(
-        str(raw_property_condition), raw_property_condition.call
-    )
+    return ConditionWithValues(str(raw_property_condition), raw_property_condition.call)
 
 
 def element_has_attribute(name: str):
@@ -207,9 +191,7 @@ def element_has_attribute(name: str):
 
     # TODO: is it OK to have some collection conditions inside a thing named element_has_attribute ? o_O
     class ConditionWithValues(ElementCondition):
-        def value(
-            self, expected: str, ignore_case=False
-        ) -> Condition[Element]:
+        def value(self, expected: str, ignore_case=False) -> Condition[Element]:
             if ignore_case:
                 warnings.warn(
                     'ignore_case syntax is experimental and might change in future',
@@ -235,26 +217,24 @@ def element_has_attribute(name: str):
                 predicate.includes(expected, ignore_case),
             )
 
-        def values(
-            self, *expected: Union[str, Iterable[str]]
-        ) -> Condition[Collection]:
-            expected = helpers.flatten(expected)
+        def values(self, *expected: Union[str, Iterable[str]]) -> Condition[Collection]:
+            expected_ = helpers.flatten(expected)
 
             return CollectionCondition.raise_if_not_actual(
-                f"has attribute '{name}' with values '{expected}'",
+                f"has attribute '{name}' with values '{expected_}'",
                 attribute_values,
-                predicate.equals_to_list(expected),
+                predicate.equals_to_list(expected_),
             )
 
         def values_containing(
             self, *expected: Union[str, Iterable[str]]
         ) -> Condition[Collection]:
-            expected = helpers.flatten(expected)
+            expected_ = helpers.flatten(expected)
 
             return CollectionCondition.raise_if_not_actual(
-                f"has attribute '{name}' with values containing '{expected}'",
+                f"has attribute '{name}' with values containing '{expected_}'",
                 attribute_values,
-                predicate.equals_by_contains_to_list(expected),
+                predicate.equals_by_contains_to_list(expected_),
             )
 
     return ConditionWithValues(
@@ -262,9 +242,7 @@ def element_has_attribute(name: str):
     )
 
 
-element_is_selected: Condition[Element] = element_has_attribute(
-    'elementIsSelected'
-)
+element_is_selected: Condition[Element] = element_has_attribute('elementIsSelected')
 
 
 def element_has_value(expected: str) -> Condition[Element]:
@@ -368,9 +346,7 @@ def collection_has_size_greater_than_or_equal(
 
 
 def collection_has_size_less_than(expected: int) -> Condition[Collection]:
-    return collection_has_size(
-        expected, 'has size less than', predicate.is_less_than
-    )
+    return collection_has_size(expected, 'has size less than', predicate.is_less_than)
 
 
 def collection_has_size_less_than_or_equal(
@@ -383,47 +359,41 @@ def collection_has_size_less_than_or_equal(
     )
 
 
-# todo: make it configurable whether assert only visible texts or ot
-def collection_has_texts(
-    *expected: Union[str, Iterable[str]]
-) -> Condition[Collection]:
-    expected = helpers.flatten(expected)
+# TODO: make it configurable whether assert only visible texts or ot
+def collection_has_texts(*expected: Union[str, Iterable[str]]) -> Condition[Collection]:
+    expected_ = helpers.flatten(expected)
 
     def visible_texts(collection: Collection) -> List[str]:
         return [
-            webelement.text
-            for webelement in collection()
-            if webelement.is_displayed()
+            webelement.text for webelement in collection() if webelement.is_displayed()
         ]
 
     return CollectionCondition.raise_if_not_actual(
-        f'has texts {expected}',
+        f'has texts {expected_}',
         visible_texts,
-        predicate.equals_by_contains_to_list(expected),
+        predicate.equals_by_contains_to_list(expected_),
     )
 
 
 def collection_has_exact_texts(
     *expected: Union[str, Iterable[str]]
 ) -> Condition[Collection]:
-    expected = helpers.flatten(expected)
+    expected_ = helpers.flatten(expected)
 
     def visible_texts(collection: Collection) -> List[str]:
         return [
-            webelement.text
-            for webelement in collection()
-            if webelement.is_displayed()
+            webelement.text for webelement in collection() if webelement.is_displayed()
         ]
 
     return CollectionCondition.raise_if_not_actual(
-        f'has exact texts {expected}',
+        f'has exact texts {expected_}',
         visible_texts,
-        predicate.equals_to_list(expected),
+        predicate.equals_to_list(expected_),
     )
 
 
-# todo: consider refactoring the code like below by moving outside fns like url, title, etc...
-# todo: probably we will do that nevertheless when reusing "commands&queries" inside element class definitions
+# TODO: consider refactoring the code like below by moving outside fns like url, title, etc...
+# TODO: probably we will do that nevertheless when reusing "commands&queries" inside element class definitions
 def browser_has_url(
     expected: str,
     describing_matched_to='has url',
@@ -459,9 +429,7 @@ def browser_has_title(
 
 
 def browser_has_title_containing(expected: str) -> Condition[Browser]:
-    return browser_has_title(
-        expected, 'has title containing', predicate.includes
-    )
+    return browser_has_title(expected, 'has title containing', predicate.includes)
 
 
 def browser_has_tabs_number(
@@ -511,7 +479,17 @@ def browser_has_tabs_number_less_than_or_equal(
     )
 
 
-def browser_has_js_returned(
+def browser_has_js_returned(expected: Any, script: str, *args) -> Condition[Browser]:
+    warnings.warn(
+        'deprecated because js does not work for mobile; '
+        'use have.script_returned(True, ...) instead',
+        DeprecationWarning,
+    )
+
+    return browser_has_script_returned(expected, script, *args)
+
+
+def browser_has_script_returned(
     expected: Any, script: str, *args
 ) -> Condition[Browser]:
     def script_result(browser: Browser):
